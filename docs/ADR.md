@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADR)
 
-> **Agent Note**: This document serves as the history of key technical decisions made in this project, explaining why certain tech stacks, design patterns, or tools were selected. When proposing major architectural changes, create a new ADR entry at the bottom of this file (or as instructed by the project team).
+> **Agent Note**: This document serves as the history of key technical decisions made in this project.
 
 ---
 
@@ -8,69 +8,35 @@
 
 | ADR ID | Date | Title | Status |
 | :--- | :--- | :--- | :--- |
-| **ADR-001** | YYYY-MM-DD | [Sample Title: Use SQLite for Local Mocking] | Proposed / Accepted / Rejected / Deprecated |
-
----
-
-## Template for New ADRs
-
-*To create a new ADR, copy the markdown below, increment the ID, and append it to the end of this document.*
-
-```markdown
-### ADR-XXX: [Title of Decision]
-
-- **Date**: YYYY-MM-DD
-- **Status**: [Proposed | Accepted | Rejected | Deprecated]
-- **Decider(s)**: [Agent | User | Developers]
-
-#### Context & Problem Statement
-*Describe the context or problem we are trying to solve. What are the constraints, requirements, and motivations?*
-
-#### Decision Drivers
-*What are the main priorities that guide our decision? (e.g., development speed, future scalability, SEO capability, browser support).*
-
-#### Considered Options
-1. **Option 1**: [Description + Pros/Cons]
-2. **Option 2**: [Description + Pros/Cons]
-3. **Option 3**: [Description + Pros/Cons]
-
-#### Decision Outcome
-*Which option did we choose and why? Describe how this option solves the problem.*
-
-##### Consequences
-- **Positive**: [Benefit 1, e.g., zero build config]
-- **Negative / Risk**: [Trade-off 1, e.g., data is lost on page refresh]
-- **Neutral**: [Expected result that is neither good nor bad]
-```
+| **ADR-001** | 2026-07-04 | Use Firebase Hosting for Frontend Server | Accepted |
+| **ADR-002** | 2026-07-04 | Use Google Cloud Functions & Scheduler for Daily Scrape | Accepted |
+| **ADR-003** | 2026-07-04 | Use Firestore as the Data Layer | Accepted |
+| **ADR-004** | 2026-07-04 | Use Vertex AI / Gemini (Free Tier) for ML Fact-Checking | Accepted |
 
 ---
 
 ## Architecture Decision Records
 
-### ADR-001: Use Vanilla CSS and Custom Properties for Styling
-
-- **Date**: 2026-07-02
+### ADR-001: Use Firebase Hosting for Frontend Server
+- **Date**: 2026-07-04
 - **Status**: Accepted
-- **Decider(s)**: Antigravity (Agent)
+- **Context**: We need a free, fast, and SEO-optimized hosting provider for the frontend. While GitHub Pages was considered, we are heavily leveraging GCP for the backend.
+- **Decision Outcome**: Use Firebase Hosting. It is GCP-native, integrates seamlessly with our deployment pipelines, offers excellent free-tier CDN performance (critical for the < 2s load time requirement), and supports custom headers (CSP for OWASP mitigation).
 
-#### Context & Problem Statement
-The user requests a responsive, high-fidelity website interface that is easy to build, modify, and optimize. We need a CSS methodology that avoids complex dependencies, is standard across modern web design, and ensures clean custom styling without bloating the project codebase with framework classes (like Tailwind utility classes) unless requested.
+### ADR-002: Use Google Cloud Functions & Scheduler for Daily Scrape
+- **Date**: 2026-07-04
+- **Status**: Accepted
+- **Context**: The site requires server-side components to autonomously research and scrape sources, without triggering external queries on every user visit.
+- **Decision Outcome**: We will use Cloud Scheduler to trigger a Cloud Function (or Cloud Run job) once a day. This ensures strict cost control and isolates the scraping/ML workload from the frontend traffic.
 
-#### Decision Drivers
-1. Minimize build configuration complexity.
-2. Maximize performance (avoid JS-in-CSS runtime cost).
-3. Ensure clean separation of concerns.
-4. Support native responsive design and CSS nesting.
+### ADR-003: Use Firestore as the Data Layer
+- **Date**: 2026-07-04
+- **Status**: Accepted
+- **Context**: The frontend needs a fast way to retrieve the scraped and fact-checked data.
+- **Decision Outcome**: Use Google Cloud Firestore. It has a generous free tier, natively integrates with the frontend via the Firebase SDK, and allows us to easily store the hierarchical/NoSQL data resulting from our scrapes. Security rules will lock down write access entirely.
 
-#### Considered Options
-1. **Option 1: Tailwind CSS** (Requires Node build step, adds styling directly to HTML templates, can result in cluttered markup).
-2. **Option 2: CSS-in-JS (e.g. styled-components)** (Needs framework integration, adds runtime parsing overhead).
-3. **Option 3: Vanilla CSS + Custom Properties** (No compilation needed for basic HTML apps, high readability, utilizes native browser capabilities).
-
-#### Decision Outcome
-**Option 3: Vanilla CSS + Custom Properties**. We will write standard CSS using modern CSS features (e.g., custom properties for design tokens, flexbox/grid layouts, media queries).
-
-##### Consequences
-- **Positive**: Excellent loading times, zero-dependency setup, highly portable code, and matches browser inspector native workflows.
-- **Negative / Risk**: We must maintain style organization manually in `index.css` or component files instead of relying on a utility-first framework.
-- **Neutral**: Agents must strictly follow design tokens in `index.css` to prevent styling drift.
+### ADR-004: Use Vertex AI / Gemini (Free Tier) for ML Fact-Checking
+- **Date**: 2026-07-04
+- **Status**: Accepted
+- **Context**: We need an ML model to interpret scraped text and provide qualitative judgements for fact-checking.
+- **Decision Outcome**: We will start with Google Cloud Vertex AI / Gemini via the free tier. This avoids the heavy operational overhead and memory requirements of hosting a large open-source LLM (like Llama 3) on Cloud Run, keeping costs at $0. A roadmap item will be added to review and compare open-source alternatives in the future.

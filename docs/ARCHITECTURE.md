@@ -1,28 +1,48 @@
 # System Architecture & Design
 
-> **Agent Note**: This document outlines the technical design, directory structure, data models, and API definitions of the application. Refer to this to understand system boundaries and architectural standards before writing or modifying code.
+> **Agent Note**: This document outlines the technical design, directory structure, data models, and API definitions of the UK Housing Data Platform.
 
 ---
 
 ## 1. System Overview
 
 ### 1.1 Tech Stack
-- **Frontend**: [e.g., HTML5, Vanilla JavaScript, Vanilla CSS, Next.js, React + Vite]
-- **State Management**: [e.g., React Context, Redux Toolkit, Vanilla JS Store]
-- **Routing**: [e.g., React Router, NextJS App Router, Vanilla JS Hash Routing]
-- **Styling**: [e.g., Vanilla CSS with Custom Properties, CSS Modules]
-- **Backend / Database**: [e.g., Firebase Firestore, Node.js + Express, Supabase, Mock LocalStorage API]
-- **Build Tools**: [e.g., Vite, Webpack, npm]
-- **Hosting / Deployments**: [e.g., Vercel, Firebase Hosting, Netlify]
+- **Frontend**: HTML/JS/CSS (Vite or Next.js static export recommended for fast loads).
+- **Hosting**: Firebase Hosting (GCP native, excellent free tier, fast CDN).
+- **Database**: Google Cloud Firestore (NoSQL document database, free tier suitable for read-heavy daily updated data).
+- **Backend / Data Pipeline**: Cloud Scheduler + Cloud Functions (or Cloud Run) for the daily scrape job.
+- **ML / AI**: Google Cloud Vertex AI / Gemini API (free tier) for NLP fact-checking and text interpretation.
+- **Source Discovery**: Autonomous agent scraping with an admin-facing source registry in Firestore.
 
 ### 1.2 System Architecture Diagram
-*Below is the high-level architecture diagram detailing the interaction between components.*
 
 ```mermaid
 graph TD
-    Client[Web Browser Client] -->|HTTP / WebSockets| Server[Application Server / Backend]
-    Server -->|Read/Write SQL| DB[(Database / Firestore)]
-    Client -->|Static Assets| CDN[CDN / Cloud Storage]
+    subgraph Frontend - Firebase Hosting
+        Client[Web Browser Client]
+        Static[Static Assets & UI]
+    end
+
+    subgraph Backend - Google Cloud Platform
+        API[Firestore Database]
+        Pipeline[Cloud Function: Daily Scraper]
+        Scheduler[Cloud Scheduler: CRON]
+        ML[Vertex AI / Gemini API]
+    end
+
+    subgraph External Sources
+        Gov[gov.uk / ONS APIs]
+        News[News / Social Media]
+    end
+
+    Scheduler -->|Trigger daily| Pipeline
+    Pipeline -->|Fetch Data| Gov
+    Pipeline -->|Fetch Data| News
+    Pipeline -->|Interpret & Fact-Check| ML
+    Pipeline -->|Write audited data| API
+    
+    Client -->|Request HTML/JS| Static
+    Client -->|Read static pre-aggregated data| API
 ```
 
 ---
@@ -31,95 +51,55 @@ graph TD
 
 ```text
 root/
-├── docs/                 # Documentation (PRD, Architecture, ADRs, Roadmap)
-│   ├── ADR.md            # Architecture Decision Records
-│   ├── ARCHITECTURE.md   # System Architecture (this file)
-│   ├── GUIDELINES.md     # Code guidelines
-│   ├── HANDOFF.md        # Session handoffs
-│   ├── PRD.md            # Product requirements
-│   └── ROADMAP.md        # Task list
-├── public/               # Static assets (images, icons, robots.txt)
-├── src/                  # Application source code
-│   ├── assets/           # Global styles, fonts, base CSS
-│   ├── components/       # Reusable UI components
-│   ├── context/          # State management / Context providers
-│   ├── hooks/            # Custom React hooks (if using React)
-│   ├── pages/            # Page-level components / routing views
-│   ├── services/         # API clients / Firebase service wrapper
-│   ├── utils/            # Helper functions and formatting utilities
-│   ├── App.jsx           # Main App component
-│   └── main.jsx          # Entry point
-├── index.html            # Main HTML document
-├── package.json          # Node dependencies and scripts
-└── vite.config.js        # Build configuration (e.g., Vite)
+├── docs/                 # Documentation (PRD, Architecture, ADRs, Roadmap, Data Pipeline)
+├── frontend/             # Application source code (UI, graphs, routing)
+│   ├── src/components/   # Reusable UI components (Graphs, FactCheckCards)
+│   ├── src/pages/        # Core pages (Stock, Building, Policy, FactCheck)
+│   └── src/services/     # Firebase SDK init and read queries
+├── backend/              # Data Pipeline and Scrapers
+│   ├── functions/        # Cloud Functions code for daily scrape
+│   ├── scrapers/         # Source-specific scraping logic
+│   └── ml/               # Prompts and interaction with Vertex AI
+└── package.json          # Workspace configuration
 ```
 
 ---
 
-## 3. Data Models & Database Schema
+## 3. Data Models & Database Schema (Firestore)
 
-### 3.1 [Entity Name, e.g., Listing]
-*Specify fields, types, and constraints.*
-- **Collection/Table Name**: `listings`
-- **Primary Key / ID**: `id` (string / UUID)
+### 3.1 `sources` Collection (Admin Registry)
+*Tracks discovered sources and their manual/automated reliability scores.*
+- `id` (String): e.g., `gov-uk-housing`
+- `name` (String): Source name
+- `url` (String): Base URL
+- `reliabilityScore` (Number): 0-100 (e.g., gov.uk = 100)
+- `type` (String): `api` | `html` | `rss`
 
-| Field Name | Type | Description | Constraints |
-| :--- | :--- | :--- | :--- |
-| `id` | String | Unique listing identifier | Required, Unique |
-| `title` | String | Title of the property | Required, max 100 chars |
-| `description` | String | Detailed property description | Required |
-| `price` | Number | Price per month in USD | Required, Min: 0 |
-| `createdAt` | Timestamp | Time when listing was created | Required |
+### 3.2 `factChecks` Collection
+*Stores the analyzed claims from the last 12 months.*
+- `claimId` (String): Unique ID
+- `statement` (String): The quoted statement
+- `sourceUrl` (String): Where the statement was made
+- `dateMade` (Timestamp): When it was said
+- `accuracyVerdict` (String): e.g., `True`, `False`, `Misleading`
+- `justification` (String): ML-generated text explaining the verdict
+- `referenceDataUrl` (String): Link to the ONS/Gov data proving the verdict
 
----
-
-## 4. API Endpoints / Service Interfaces
-
-### 4.1 Frontend Service Interfaces (For Serverless / Frontend-only apps)
-*Define the Javascript functions or SDK calls that act as services.*
-
-#### `src/services/listingService.js`
-- `getListings(filters)`: Retrieves a list of properties matching criteria.
-- `getListingById(id)`: Retrieves a single property detail.
-- `createListing(listingData)`: Saves a new property.
-
-### 4.2 Backend HTTP API Routes (If applicable)
-*Specify HTTP methods, paths, request payloads, and response structures.*
-
-#### `GET /api/listings`
-- **Description**: Returns all active listings.
-- **Query Params**: `limit=integer`, `price_max=number`
-- **Response (200 OK)**:
-```json
-[
-  {
-    "id": "abc-123",
-    "title": "Modern Downtown Apartment",
-    "price": 1200
-  }
-]
-```
+### 3.3 `housingStats` Collection
+*Pre-aggregated documents containing time-series data for fast frontend querying.*
+- Documents like `currentStock`, `historicalBuilding` containing JSON arrays of timeline metrics categorized by location and type.
 
 ---
 
-## 5. Security & State Flow
+## 4. Security & Data Flow
 
-### 5.1 Data Flow Scenario (e.g., User Creating a Listing)
-```mermaid
-sequenceDiagram
-    participant User as User (Browser)
-    participant UI as Listing Form (Component)
-    participant Auth as Auth State (Context)
-    participant DB as Firestore (Database)
+### 4.1 Traffic & Cost Management
+To avoid unpredictable external queries and API costs:
+- **No live scraping**: The frontend **NEVER** calls external news or government APIs.
+- **Daily Batch**: The backend Cloud Function runs strictly once per day, processing new info, running ML tasks, and writing the final state to Firestore.
+- **Firestore Reads**: The frontend only reads from Firestore (or static compiled JSON). No login is required, so Firestore security rules must be set to `read: true, write: false`.
 
-    User->>UI: Fills form & clicks "Submit"
-    UI->>Auth: Check if user is logged in
-    alt Not Logged In
-        Auth-->>UI: Return Auth Error
-        UI->>User: Display Login Modal
-    else Logged In
-        UI->>DB: Write Listing data with owner ID
-        DB-->>UI: Success (Document Ref ID)
-        UI->>User: Show Success Toast & Redirect
-    end
-```
+### 4.2 Security Standards
+- OWASP Top 10 mitigation: 
+  - Strictly sanitize any ML-generated text before rendering in the DOM to prevent XSS.
+  - Implement Content Security Policy (CSP) headers via Firebase Hosting config.

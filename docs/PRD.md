@@ -1,92 +1,86 @@
 # Product Requirements Document (PRD)
 
-> **Agent Note**: This document defines the "Why" and the "What" of the application. Before starting work, review the requirements, goals, and scope outlined below. If making functional changes to the codebase, ensure they align with this PRD or update this document first if scope changes have been approved by the user.
+> **Agent Note**: This document defines the "Why" and the "What" of the UK Housing Data Platform. Before starting work, review the requirements, goals, and scope outlined below. Ensure any functional changes align with this PRD.
 
 ---
 
 ## 1. Document Control
-- **Project Name**: [Project Name]
-- **Status**: Draft / In Review / Approved
-- **Last Updated**: YYYY-MM-DD
-- **Authors / Stakeholders**: [Names/Roles]
-
-### Revision History
-| Version | Date | Author | Description |
-| :--- | :--- | :--- | :--- |
-| v0.1 | YYYY-MM-DD | Agent/User | Initial draft |
+- **Project Name**: UK Housing Data Platform
+- **Status**: Approved
+- **Last Updated**: 2026-07-04
+- **Authors / Stakeholders**: User, Antigravity
 
 ---
 
 ## 2. Product Overview & Goals
 
 ### 2.1 Problem Statement
-*Describe the problem this software solves. Why are we building this?*
+Information about UK housing, house-building, and government policy is scattered across multiple sources (ONS, Gov.uk, news sites). It is difficult for researchers, journalists, and policy writers to quickly find reliable, fact-checked statistics and statements about the UK housing market in an easy-to-digest format.
 
 ### 2.2 Product Vision
-*The high-level goal and long-term vision of the product.*
+To build a highly accessible, fast, and secure web platform that automatically collates, visualizes, and fact-checks information about UK housing using daily scraping and ML models. The platform acts as a definitive quick-reference source for housing experts.
 
 ### 2.3 Key Objectives & Success Metrics
-- **Objective 1**: [Describe objective] -> **Metric**: [e.g., Load time < 2s]
-- **Objective 2**: [Describe objective] -> **Metric**: [e.g., 90%+ Lighthouse accessibility score]
+- **Objective 1**: Aggregate and visualize current stock and house-building data. -> **Metric**: Daily automated data pipeline success rate > 99%.
+- **Objective 2**: Automate fact-checking of news statements. -> **Metric**: High reliability scoring with clear audit trails for 100% of claims.
+- **Objective 3**: Deliver exceptional performance. -> **Metric**: Page load < 2 seconds for 90% of customers on 5G/WiFi.
 
 ---
 
 ## 3. Target Audience & User Personas
 
 ### 3.1 User Personas
-*Describe the primary users of the application.*
-1. **[Persona Name]**: [Brief description of role, needs, and pain points].
-2. **[Persona Name]**: [Brief description of role, needs, and pain points].
+1. **Housing Researchers & Policy Writers**: Need accurate, historical, and segmented data (by location, type) to write reports and influence policy.
+2. **Journalists**: Need quick fact-checking of recent housing statements with verifiable source links to write accurate articles.
+3. **General Public**: Citizens interested in the state of UK housing and current government policies.
 
 ---
 
-## 4. Functional Requirements & User Stories
+## 4. Functional Requirements
 
-### 4.1 Core Features (In-Scope)
-*Group features logically by module or page.*
+### 4.1 Core Pages (In-Scope)
 
-#### Component/Module A: [Name]
-- **[Feature ID] [Feature Name]**: [Detailed description of the feature].
-- **[Feature ID] [Feature Name]**: [Detailed description of the feature].
+1. **Current Stock Page**: 
+   - Key statistics and visuals (graphs) on total UK housing.
+   - Breakdown capabilities by type (detached, semi-detached, terraced, etc.).
+   - Breakdown capabilities by location (regional area, nation, council).
+   - Other metrics like average occupancy and average house price.
+2. **House-Building Page**:
+   - Timeline graphs and visuals explaining housebuilding levels over the past 30 years.
+   - Breakdowns by location and property type.
+3. **Current Policy Page**:
+   - Key statements and policy snippets summarizing current UK government policy on housing.
+4. **News Fact-Checking Page**:
+   - List of key statements made in news/social media/press releases over the past 12 months.
+   - Clear referencing and source linking.
+   - Qualitative judgement on accuracy (generated via ML).
+   - Clear justification linking to source data confirming or denying the claim.
+5. **Methodology & Data Sources Page**:
+   - Explanation of the daily scrape process, source reliability scoring (e.g., Gov.uk considered highly reliable), and ML fact-checking weighting logic to ensure transparency and build trust.
 
-#### Component/Module B: [Name]
-- **[Feature ID] [Feature Name]**: [Detailed description of the feature].
-
-### 4.2 User Stories
-*Use the format: "As a [user type], I want to [action], so that [benefit]."*
-- **US-01**: As a visitor, I want to view housing listings so that I can find a place to rent.
-- **US-02**: As an agent, I want to add new listings so that visitors can see them.
-
-### 4.3 Out of Scope (Non-Goals)
-*Explicitly state what will NOT be built in this phase to prevent scope creep.*
-- [Out of scope item 1]
-- [Out of scope item 2]
+### 4.2 Out of Scope
+- User authentication and login (the site is purely public read-only).
+- Real-time live data querying from external sites driven by user traffic (all data must be pre-scraped daily).
 
 ---
 
 ## 5. Non-Functional Requirements (NFRs)
 
-### 5.1 Performance & Reliability
-- Page load time must be under [X] seconds on average mobile connections.
-- Core Web Vitals (LCP, FID, CLS) must be in the "Good" range.
+### 5.1 Performance
+- **Load Time**: Page load must be under 2 seconds, 90% of the time, for customers on a 5G connection or WiFi.
 
-### 5.2 Accessibility (a11y)
-- Must comply with WCAG 2.1 AA standards.
-- Semantic HTML tags must be used correctly.
-- Interactive elements must support keyboard navigation and include appropriate ARIA attributes.
+### 5.2 Security
+- Strict adherence to industry standards.
+- At least all relevant OWASP Top 10 vulnerabilities mitigated or blocked.
+- No direct user inputs other than safe client-side UI filters.
 
-### 5.3 SEO (Search Engine Optimization)
-- Semantic page structures with appropriate heading hierarchy (`<h1>`, `<h2>`, etc.).
-- Custom meta titles, descriptions, and OpenGraph tags for every page.
-- Image alt attributes are mandatory for all content images.
+### 5.3 Accessibility (a11y)
+- Must comply with industry benchmarks for accessibility (e.g., WCAG 2.1 AA).
+- All graphs must have accessible data table alternatives or high-quality descriptive aria labels.
 
-### 5.4 Security & Privacy
-- All forms must have validation and anti-XSS measures.
-- Sensitive user data must not be stored in local storage or exposed in front-end client code.
+### 5.4 SEO
+- Optimized structure so users searching for "facts and figures on UK housing" are directed here.
+- Semantic HTML, unique meta descriptions, and fast server response times.
 
----
-
-## 6. Open Questions & Assumptions
-*List any uncertainties that need resolution before proceeding.*
-- **Question 1**: [Detail question/ambiguity]
-- **Assumption 1**: [Detail assumption made]
+### 5.5 Transparency & Data Auditability
+- **Crucial Requirement**: Any data stored or presented must maintain a clear referencing and audit trail. Users must see exactly where it came from.
