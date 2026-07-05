@@ -5,12 +5,11 @@ import datetime
 
 # Setup Gemini Model with explicit token limits for cost control
 PROJECT_ID = os.environ.get("GCP_PROJECT", "housing-with-agents")
-# We use europe-west1 for Vertex AI because 3.1 Flash-Lite is not yet in europe-west2
-VERTEX_REGION = "europe-west1"
-MODEL_NAME = "gemini-3.1-flash-lite"
+REGION = "europe-west2"
+MODEL_NAME = "gemini-2.5-flash"
 PROMPT_VERSION = "v1.0"
 
-vertexai.init(project=PROJECT_ID, location=VERTEX_REGION)
+vertexai.init(project=PROJECT_ID, location=REGION)
 
 model = GenerativeModel(MODEL_NAME)
 
