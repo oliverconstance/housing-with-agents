@@ -8,10 +8,12 @@ on:
     paths:
       - 'terraform/**'
       - 'frontend/**'
+      - 'backend/**'
   pull_request:
     paths:
       - 'terraform/**'
       - 'frontend/**'
+      - 'backend/**'
 
 # Required for Workload Identity Federation
 permissions:
