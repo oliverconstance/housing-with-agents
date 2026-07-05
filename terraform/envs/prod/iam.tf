@@ -53,6 +53,7 @@ resource "google_project_iam_member" "scraper_secret_accessor" {
 resource "google_project_iam_member" "cicd_firebase_admin" {
   project = var.project_id
   role    = "roles/firebase.admin"
+
   # Hardcoding the CI/CD SA since it was created manually in Milestone 0
-  member  = "serviceAccount:github-service-account-tf@${var.project_id}.iam.gserviceaccount.com"
+  member = "serviceAccount:github-service-account-tf@${var.project_id}.iam.gserviceaccount.com"
 }
