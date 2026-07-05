@@ -73,3 +73,28 @@ resource "google_firebase_project" "default" {
   # Firebase must be initialized after the APIs are enabled
   depends_on = [google_project_service.enabled_apis]
 }
+
+resource "google_firebase_web_app" "default" {
+  provider     = google-beta
+  project      = var.project_id
+  display_name = "Housing Fact Check Frontend"
+
+  depends_on = [google_firebase_project.default]
+}
+
+data "google_firebase_web_app_config" "default" {
+  provider   = google-beta
+  project    = var.project_id
+  web_app_id = google_firebase_web_app.default.app_id
+}
+
+output "firebase_config" {
+  value = {
+    appId             = google_firebase_web_app.default.app_id
+    apiKey            = data.google_firebase_web_app_config.default.api_key
+    authDomain        = data.google_firebase_web_app_config.default.auth_domain
+    projectId         = var.project_id
+    storageBucket     = lookup(data.google_firebase_web_app_config.default, "storage_bucket", "")
+    messagingSenderId = lookup(data.google_firebase_web_app_config.default, "messaging_sender_id", "")
+  }
+}

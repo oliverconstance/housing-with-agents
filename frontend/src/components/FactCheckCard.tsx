@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Quote, AlertCircle, CheckCircle, ShieldAlert, ChevronDown, ChevronUp } from 'lucide-react';
+import { Quote, AlertCircle, CheckCircle, ShieldAlert, ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 
-export type Verdict = 'True' | 'Mostly True' | 'Misleading' | 'False';
+export type Verdict = 'True' | 'Mostly True' | 'Misleading' | 'False' | 'Unverifiable';
 
 interface FactCheckCardProps {
   politician: string;
@@ -21,6 +21,8 @@ const FactCheckCard: React.FC<FactCheckCardProps> = ({ politician, quote, date, 
       case 'Mostly True': return { color: 'var(--accent-primary)', icon: <CheckCircle size={18} /> };
       case 'Misleading': return { color: 'var(--accent-warning)', icon: <AlertCircle size={18} /> };
       case 'False': return { color: 'var(--accent-danger)', icon: <ShieldAlert size={18} /> };
+      case 'Unverifiable': return { color: 'var(--text-secondary)', icon: <HelpCircle size={18} /> };
+      default: return { color: 'var(--text-secondary)', icon: <HelpCircle size={18} /> };
     }
   };
 
