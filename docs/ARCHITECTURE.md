@@ -20,7 +20,7 @@
 ### 1.2 Detailed Component Usage & Configuration
 
 #### A. Network & Edge Layer
-1. **Cloud DNS**: Manages the domain records. **IaC Config**: Terraform `google_dns_managed_zone` and `google_dns_record_set`.
+1. **Cloud DNS**: Manages the domain records (`housinginsights.uk`). **Note**: This was provisioned automatically via Google Domains and is managed manually via the Cloud Console UI. It is intentionally omitted from Terraform to avoid state conflicts.
 2. **Firebase Hosting (CDN/WAF)**: Serves the static frontend assets. Provides a global CDN and automatic SSL provisioning. **IaC Config**: Deployed via Firebase CLI in CI/CD, integrated with Terraform via `google_firebase_hosting_site`. Custom headers configured in `firebase.json` for strict CSP.
 
 #### B. Storage Layer

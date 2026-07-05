@@ -6,7 +6,7 @@
 
 ## 1. Milestones Overview
 
-- [ ] **Milestone 0: Technical Architecture & IaC Foundation** (Target: YYYY-MM-DD)
+- [x] **Milestone 0: Technical Architecture & IaC Foundation** (Completed)
   - Detail every GCP component and network layer.
   - Setup Terraform repository structure and remote state bucket.
   - Provision GCP project, IAM roles, Secret Manager, Cloud DNS, and Firestore via IaC.
@@ -37,14 +37,23 @@
 - [ ] **TSK-013**: Integrate Vertex AI/Gemini pipeline for fact-checking logic.
 - [ ] **TSK-014**: Connect React frontend to live Firestore data.
 
-### Backlog (Future Milestones)
+### Backlog (Future Milestones & Audit Recommendations)
 - [ ] **TSK-020**: Run performance profiling to hit the 2s load time target.
 - [ ] **TSK-021**: Configure custom domain mapping (`housinginsights.uk`).
+- [ ] **TSK-030**: Set up automated frontend testing (Vitest/React Testing Library) and integrate into CI/CD.
+- [ ] **TSK-031**: Enforce Branch Protection on `main` and migrate to a Pull Request workflow.
+- [ ] **TSK-032**: Define strict data contracts (JSON schemas) between Frontend and Python Backend.
+- [ ] **TSK-033**: Implement UI Resilience (Loading spinners, empty states, error boundaries).
+- [ ] **TSK-034**: Provision a staging environment (`envs/staging`) in Terraform to isolate development testing.
 
 ---
 
 ## 3. Completed Tasks
 
+- [x] **TSK-001**: Define comprehensive IaC strategy and expand `ARCHITECTURE.md` with explicit GCP component layers. *(Completed: 2026-07-04)*
+- [x] **TSK-002**: Create foundational GCP project, link billing, and enable required APIs. *(Completed: 2026-07-05)*
+- [x] **TSK-003**: Set up Terraform backend (GCS bucket) and directory structure. *(Completed: 2026-07-05)*
+- [x] **TSK-004**: Write Terraform definitions for Cloud DNS, Firestore, and IAM Service Accounts. *(Completed: 2026-07-05)*
+- [x] **TSK-005**: Deploy foundational infrastructure and configure GitHub Actions for Terraform CI/CD. *(Completed: 2026-07-05)*
 - [x] **TSK-010**: Scaffold static UI on top of Firebase Hosting, including advanced filtering and sub-routing. *(Completed: 2026-07-05)*
-
 - [x] **TSK-000**: Define UK Housing platform product specs (`PRD.md`). *(Completed: 2026-07-04)*
