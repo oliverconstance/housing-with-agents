@@ -31,9 +31,9 @@ def analyze_claim(statement: str, context: str) -> dict:
     
     prompt = f"Context: {context}\nStatement: \"{statement}\"\nAnalyze this statement."
     
-    # NFR: max_output_tokens=500 to cap inference costs
+    # NFR: max_output_tokens=10000 to generously allow for Gemini 2.5 thinking tokens
     generation_config = {
-        "max_output_tokens": 500,
+        "max_output_tokens": 10000,
         "temperature": 0.2,
         "response_mime_type": "application/json",
     }
