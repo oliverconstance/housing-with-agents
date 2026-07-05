@@ -23,7 +23,7 @@ resource "google_storage_bucket_object" "scraper_zip_object" {
 # The Cloud Function (2nd Gen / Cloud Run)
 resource "google_cloudfunctions2_function" "daily_scraper" {
   name        = "housing-daily-scraper"
-  location    = "europe-west1"
+  location    = var.region
   description = "Daily scraper and Vertex AI fact-checking pipeline"
 
   build_config {
