@@ -13,6 +13,7 @@
 | **ADR-003** | 2026-07-04 | Use Firestore as the Data Layer | Accepted |
 | **ADR-004** | 2026-07-04 | Use Vertex AI / Gemini (Free Tier) for ML Fact-Checking | Accepted |
 | **ADR-005** | 2026-07-05 | Use Terraform for Infrastructure as Code (IaC) | Accepted |
+| **ADR-006** | 2026-07-05 | Use Firebase Analytics (GA4) & Performance Monitoring | Accepted |
 
 ---
 
@@ -51,3 +52,12 @@
   - **Positive**: Complete auditability of infrastructure changes via PR review. Instant disaster recovery. Clear documentation of the actual system architecture.
   - **Negative**: Adds overhead to initial project setup (creating the Terraform state bucket, configuring service accounts). Requires developers/agents to learn Terraform HCL.
   - **Exception**: Foundational project creation and billing linking must be done manually (documented in `ARCHITECTURE.md`).
+
+### ADR-006: Use Firebase Analytics (GA4) & Performance Monitoring
+- **Date**: 2026-07-05
+- **Status**: Accepted
+- **Context**: We need to track total traffic, time on site, visits per page, and load times. Long-term, the site aims to monetize via advertising networks which require verified traffic data.
+- **Decision Outcome**: Use the Firebase SDK to initialize Google Analytics 4 (GA4) and Firebase Performance Monitoring. 
+- **Consequences**: 
+  - **Positive**: GA4 is the industry standard for ad-network verification. Firebase Performance Monitoring natively tracks Time To First Byte (TTFB) and network requests to prove we meet our < 2s load time NFR.
+  - **Negative**: Requires adding tracking SDKs to the frontend bundle, slightly increasing the initial JS payload.

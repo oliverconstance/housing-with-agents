@@ -62,6 +62,9 @@ To build a highly accessible, fast, and secure web platform that automatically c
 5. **Methodology & Data Sources Page**:
    - Explanation of the daily scrape process and ML fact-checking weighting logic.
    - Dynamic, tabular "Indexed Sources" ledger showing every tracked URL, its update frequency, and the timestamp of the last successful scrape.
+6. **Site Analytics & Performance Tracking**:
+   - Integrated Google Analytics 4 (via Firebase) to track total traffic, click-throughs, visits per page, and time on site for future ad-network verification.
+   - Firebase Performance Monitoring to automatically track TTFB, page load times, and network requests.
 
 ### 4.2 Out of Scope
 - User authentication and login (the site is purely public read-only).
@@ -73,6 +76,7 @@ To build a highly accessible, fast, and secure web platform that automatically c
 
 ### 5.1 Performance
 - **Load Time**: Page load must be under 2 seconds, 90% of the time, for customers on a 5G connection or WiFi.
+- **Monitoring**: Firebase Performance Monitoring must be initialized on the client-side to actively capture and prove this NFR in real-time.
 
 ### 5.2 Security
 - Strict adherence to industry standards.

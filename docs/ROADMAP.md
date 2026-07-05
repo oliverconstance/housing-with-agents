@@ -45,6 +45,8 @@
 - [ ] **TSK-032**: Define strict data contracts (JSON schemas) between Frontend and Python Backend.
 - [ ] **TSK-033**: Implement UI Resilience (Loading spinners, empty states, error boundaries).
 - [ ] **TSK-034**: Provision a staging environment (`envs/staging`) in Terraform to isolate development testing.
+- [ ] **TSK-035**: Register a Firebase Web App via Console/Terraform to generate Analytics API keys.
+- [ ] **TSK-036**: Initialize Firebase Analytics (GA4) & Performance Monitoring SDKs in the React frontend (`main.tsx`).
 
 ---
 
