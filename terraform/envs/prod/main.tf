@@ -24,17 +24,15 @@ locals {
 
 # The `google_project_service` resource turns on APIs.
 # By using `for_each`, Terraform acts like a loop, creating one resource for every item in our `local.services` list.
+# Best Practice: We don't want Terraform to accidentally disable critical APIs 
+# if we remove them from the list, as this could destroy live resources unexpectedly.
 resource "google_project_service" "enabled_apis" {
   for_each                   = toset(local.services)
   project                    = var.project_id
   service                    = each.key
-  
-  # Best Practice: We don't want Terraform to accidentally disable critical APIs 
-  # if we remove them from the list, as this could destroy live resources unexpectedly.
   disable_dependent_services = true
-  disable_on_destroy         = false 
+  disable_on_destroy         = false
 }
-
 
 # ==============================================================================
 # 2. Cloud DNS Zone (Managed manually via Google Domains)
@@ -43,22 +41,18 @@ resource "google_project_service" "enabled_apis" {
 # registration process. Therefore, we do not create it via Terraform here to avoid 
 # an "already exists" error.
 
-
-
 # ==============================================================================
 # 3. Firestore Database
 # ==============================================================================
 # This is our NoSQL data layer where the daily scrape results will be stored.
-
+# Best Practice: Databases hold critical state. Setting deletion_policy to "ABANDON"
+# means if someone deletes this resource from Terraform, Terraform will stop tracking it,
+# but it WON'T actually delete the data in Google Cloud, preventing catastrophic data loss.
 resource "google_firestore_database" "database" {
-  project     = var.project_id
-  name        = "(default)" # GCP highly recommends using "(default)" for the primary database
-  location_id = var.region
-  type        = "FIRESTORE_NATIVE" # Native mode is optimized for web/mobile sync and rich querying
-
-  # Best Practice: Databases hold critical state. Setting deletion_policy to "ABANDON"
-  # means if someone deletes this resource from Terraform, Terraform will stop tracking it,
-  # but it WON'T actually delete the data in Google Cloud, preventing catastrophic data loss.
+  project         = var.project_id
+  name            = "(default)" # GCP highly recommends using "(default)" for the primary database
+  location_id     = var.region
+  type            = "FIRESTORE_NATIVE" # Native mode is optimized for web/mobile sync and rich querying
   deletion_policy = "ABANDON"
 
   depends_on = [google_project_service.enabled_apis]

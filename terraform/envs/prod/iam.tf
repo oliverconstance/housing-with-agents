@@ -22,11 +22,11 @@ resource "google_service_account" "scraper_sa" {
 
 # 2. Grant Datastore User
 # This allows the function to write the fact-checked data into Firestore.
+# We use string interpolation ("${...}") to dynamically grab the email address
+# of the service account we just created above.
 resource "google_project_iam_member" "scraper_datastore_user" {
   project = var.project_id
   role    = "roles/datastore.user"
-  # We use string interpolation ("${...}") to dynamically grab the email address
-  # of the service account we just created above.
   member  = "serviceAccount:${google_service_account.scraper_sa.email}"
 }
 
