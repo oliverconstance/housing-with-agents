@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FactCheckCard from '../components/FactCheckCard';
+import SkeletonCard from '../components/SkeletonCard';
 import type { Verdict } from '../components/FactCheckCard';
 import { Search } from 'lucide-react';
 import { collection, getDocs, query } from 'firebase/firestore';
@@ -10,6 +11,7 @@ const FactCheckPage: React.FC = () => {
   const [filterVerdict, setFilterVerdict] = useState('All');
   const [factChecks, setFactChecks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchFactChecks = async () => {
@@ -31,8 +33,10 @@ const FactCheckPage: React.FC = () => {
           }
         });
         setFactChecks(fetchedData);
-      } catch (error) {
-        console.error("Error fetching fact checks: ", error);
+        setError(null);
+      } catch (err: any) {
+        console.error("Error fetching fact checks: ", err);
+        setError(err.message || 'Failed to fetch data.');
       } finally {
         setLoading(false);
       }
@@ -103,8 +107,15 @@ const FactCheckPage: React.FC = () => {
       {/* Results List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {loading ? (
-          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-            Loading live fact-checks from Firestore...
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : error ? (
+          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--accent-danger)' }}>
+            <p>Oops! We had trouble connecting to the database.</p>
+            <p style={{ fontSize: '0.9rem', opacity: 0.8 }}>{error}</p>
           </div>
         ) : (
           <>
