@@ -6,7 +6,7 @@ import datetime
 # Setup Gemini Model with explicit token limits for cost control
 PROJECT_ID = os.environ.get("GCP_PROJECT", "housing-with-agents")
 REGION = "europe-west2"
-MODEL_NAME = "gemini-1.5-flash"
+MODEL_NAME = "gemini-2.5-flash"
 PROMPT_VERSION = "v1.0"
 
 vertexai.init(project=PROJECT_ID, location=REGION)
