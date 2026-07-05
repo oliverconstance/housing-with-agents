@@ -1,6 +1,6 @@
 functions-framework==3.*
 firebase-admin==6.5.*
-google-cloud-aiplatform==1.49.*
+google-cloud-aiplatform
 beautifulsoup4==4.12.*
 requests==2.31.*
 pydantic==2.7.*
