@@ -37,22 +37,12 @@ resource "google_project_service" "enabled_apis" {
 
 
 # ==============================================================================
-# 2. Cloud DNS Zone
+# 2. Cloud DNS Zone (Managed manually via Google Domains)
 # ==============================================================================
-# Cloud DNS will manage the records (A, TXT, CNAME) for our custom domain.
+# You elected to create the Cloud DNS zone automatically during the Google Domains 
+# registration process. Therefore, we do not create it via Terraform here to avoid 
+# an "already exists" error.
 
-resource "google_dns_managed_zone" "primary" {
-  # Resource names in GCP often cannot contain dots, so we replace them with dashes.
-  name        = replace(var.domain_name, ".", "-")
-  # The actual DNS name requires a trailing dot.
-  dns_name    = "${var.domain_name}."
-  description = "Primary DNS zone for UK Housing Data Platform"
-
-  # Explicit Dependency: Terraform is smart and builds a dependency graph. 
-  # However, it doesn't automatically know we need the DNS API enabled before creating a DNS zone.
-  # We use `depends_on` to force Terraform to wait for the API enablement to finish first.
-  depends_on = [google_project_service.enabled_apis]
-}
 
 
 # ==============================================================================
