@@ -75,9 +75,10 @@ resource "google_firebase_project" "default" {
 }
 
 resource "google_firebase_web_app" "default" {
-  provider = google-beta
-  project  = var.project_id
+  provider     = google-beta
+  project      = var.project_id
   display_name = "Housing Fact Check Frontend"
+
   depends_on = [google_firebase_project.default]
 }
 
