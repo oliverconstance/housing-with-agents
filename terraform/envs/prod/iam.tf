@@ -46,3 +46,13 @@ resource "google_project_iam_member" "scraper_secret_accessor" {
   role    = "roles/secretmanager.secretAccessor"
   member  = "serviceAccount:${google_service_account.scraper_sa.email}"
 }
+
+# 5. Grant Firebase Admin to CI/CD Service Account
+# Since we are deploying the frontend via GitHub Actions using the CI/CD service account,
+# we need to grant it Firebase Admin permissions to publish to Hosting.
+resource "google_project_iam_member" "cicd_firebase_admin" {
+  project = var.project_id
+  role    = "roles/firebase.admin"
+  # Hardcoding the CI/CD SA since it was created manually in Milestone 0
+  member  = "serviceAccount:github-service-account-tf@${var.project_id}.iam.gserviceaccount.com"
+}

@@ -18,7 +18,9 @@ locals {
     "run.googleapis.com",                  # 2nd Gen Cloud Functions run on top of Cloud Run
     "cloudscheduler.googleapis.com",       # Required for the daily cron jobs
     "aiplatform.googleapis.com",           # Vertex AI / Gemini for ML fact-checking
-    "secretmanager.googleapis.com"         # Storing sensitive API keys securely
+    "secretmanager.googleapis.com",        # Storing sensitive API keys securely
+    "firebase.googleapis.com",             # Required to link GCP project to Firebase
+    "firebasehosting.googleapis.com"       # Required to deploy frontend to Firebase
   ]
 }
 
@@ -55,5 +57,19 @@ resource "google_firestore_database" "database" {
   type            = "FIRESTORE_NATIVE" # Native mode is optimized for web/mobile sync and rich querying
   deletion_policy = "ABANDON"
 
+  depends_on = [google_project_service.enabled_apis]
+}
+
+# ==============================================================================
+# 4. Firebase Project Setup
+# ==============================================================================
+# This links our existing GCP project to the Firebase ecosystem, allowing us to 
+# use Firebase Hosting for the frontend.
+
+resource "google_firebase_project" "default" {
+  provider = google-beta
+  project  = var.project_id
+
+  # Firebase must be initialized after the APIs are enabled
   depends_on = [google_project_service.enabled_apis]
 }
