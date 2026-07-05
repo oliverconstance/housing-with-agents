@@ -87,5 +87,12 @@ To build a highly accessible, fast, and secure web platform that automatically c
 - Optimized structure so users searching for "facts and figures on UK housing" are directed here.
 - Semantic HTML, unique meta descriptions, and fast server response times.
 
-### 5.5 Transparency & Data Auditability
-- **Crucial Requirement**: Any data stored or presented must maintain a clear referencing and audit trail. Users must see exactly where it came from.
+### 5.5 Cloud Costs & Backend Limits
+- **Cost Constraint**: The monthly GCP cloud bill must strictly not exceed £20.
+- **Execution Limits**: Cloud Functions must have a hard timeout limit of 540 seconds (9 minutes) to prevent runaway billing from infinite loops.
+- **LLM Token Governance**: Vertex AI calls must be configured with explicit `max_output_tokens` (e.g., 500) to cap inference costs.
+- **AI Inference Caching**: The backend must implement deterministic hashing of extracted quotes. If a quote exists in Firestore, the AI step is skipped entirely to prevent duplicate token spend.
+- **Billing Controls**: GCP Budgets must be configured to trigger programmatic alerts when monthly spend hits £10 and £15.
+
+### 5.6 Transparency & Data Auditability
+- **Crucial Requirement**: Any data stored or presented must maintain a clear referencing and audit trail. Users must see exactly where it came from and how AI models evaluated it.
