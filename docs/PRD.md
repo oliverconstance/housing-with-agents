@@ -77,6 +77,7 @@ To build a highly accessible, fast, and secure web platform that automatically c
 ### 5.1 Performance
 - **Load Time**: Page load must be under 2 seconds, 90% of the time, for customers on a 5G connection or WiFi.
 - **Monitoring**: Firebase Performance Monitoring must be initialized on the client-side to actively capture and prove this NFR in real-time.
+- **UI Resilience**: The frontend must degrade gracefully during data fetches or failures, utilizing Skeletons and Error Boundaries to maintain perceived performance and high aesthetic quality.
 
 ### 5.2 Security
 - Strict adherence to industry standards.
