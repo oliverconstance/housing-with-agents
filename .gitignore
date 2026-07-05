@@ -1,0 +1,27 @@
+# Local Terraform variables (NEVER commit the actual .tfvars file if it contains secrets)
+*.tfvars
+*.tfvars.json
+
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform state and directories
+.terraform/
+.terraform.*
+terraform.tfstate
+terraform.tfstate.backup
+
+# Crash logs
+crash.log
+
+# Mac OS
+.DS_Store
+
+# Node/Frontend/Backend (for later)
+node_modules/
+.env
+.env.local
+.env.*.local

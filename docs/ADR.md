@@ -12,6 +12,7 @@
 | **ADR-002** | 2026-07-04 | Use Google Cloud Functions & Scheduler for Daily Scrape | Accepted |
 | **ADR-003** | 2026-07-04 | Use Firestore as the Data Layer | Accepted |
 | **ADR-004** | 2026-07-04 | Use Vertex AI / Gemini (Free Tier) for ML Fact-Checking | Accepted |
+| **ADR-005** | 2026-07-05 | Use Terraform for Infrastructure as Code (IaC) | Accepted |
 
 ---
 
@@ -40,3 +41,13 @@
 - **Status**: Accepted
 - **Context**: We need an ML model to interpret scraped text and provide qualitative judgements for fact-checking.
 - **Decision Outcome**: We will start with Google Cloud Vertex AI / Gemini via the free tier. This avoids the heavy operational overhead and memory requirements of hosting a large open-source LLM (like Llama 3) on Cloud Run, keeping costs at $0. A roadmap item will be added to review and compare open-source alternatives in the future.
+
+### ADR-005: Use Terraform for Infrastructure as Code (IaC)
+- **Date**: 2026-07-05
+- **Status**: Accepted
+- **Context**: Relying on manual UI console configuration ("click-ops") for cloud infrastructure leads to configuration drift, hidden security flaws, and an inability to reliably rebuild or test the environment. We must enforce declarative infrastructure.
+- **Decision Outcome**: We will use Terraform to define *every* configurable layer of the GCP architecture (DNS, Cloud Functions, Firestore databases, IAM policies, and Secret Manager).
+- **Consequences**:
+  - **Positive**: Complete auditability of infrastructure changes via PR review. Instant disaster recovery. Clear documentation of the actual system architecture.
+  - **Negative**: Adds overhead to initial project setup (creating the Terraform state bucket, configuring service accounts). Requires developers/agents to learn Terraform HCL.
+  - **Exception**: Foundational project creation and billing linking must be done manually (documented in `ARCHITECTURE.md`).

@@ -1,0 +1,11 @@
+# ==============================================================================
+# Example Terraform Variables File
+# ==============================================================================
+# COPY this file and rename it to `terraform.tfvars`. 
+# The `terraform.tfvars` file is automatically ignored by git (thanks to .gitignore),
+# making it safe to put your local values here.
+
+# Replace these with your actual values:
+project_id  = "my-actual-gcp-project-id-123"
+domain_name = "ukhousingdata.org"
+region      = "europe-west2" # Optional, defaults to europe-west2 if omitted

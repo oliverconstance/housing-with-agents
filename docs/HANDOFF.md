@@ -5,42 +5,41 @@
 ---
 
 ## 1. Session Metadata
-- **Date**: 2026-07-04
+- **Date**: 2026-07-05
 - **Last Agent**: Antigravity
 - **Current Task ID**: TSK-001
-- **Current Status**: Ready to Start Development
+- **Current Status**: Ready for Infrastructure Setup (Milestone 0)
 
 ---
 
 ## 2. Progress Summary
 
 ### What was completed in this session:
-- Completely rewrote the project documentation (`PRD.md`, `ARCHITECTURE.md`, `ADR.md`, `GUIDELINES.md`, `ROADMAP.md`) to reflect the UK Housing Data Platform vision.
-- Added `DATA_PIPELINE.md` to define the fact-checking and scraping rules.
-- Agreed on GCP/Firebase stack with Vertex AI free tier.
+- Updated the documentation to mandate Infrastructure as Code (Terraform) across the entire stack.
+- Formally expanded `ARCHITECTURE.md` to define every single GCP component (Cloud DNS, Firebase Edge, Firestore, Cloud Functions, Scheduler, Secret Manager, Vertex AI, and IAM).
+- Created a comprehensive flow diagram and detailed manual click-ops instructions for the non-IaC boot sequence.
 
 ### What was left in progress (incomplete):
-- No code has been written yet. The project is at Day 0 of development.
+- No Terraform code or application code has been written yet.
 
 ---
 
 ## 3. Blockers & Decisions Needed
-- None at this time.
+- A human administrator needs to perform the manual "Click-Ops Instructions" outlined in `ARCHITECTURE.md` Section 3 (Create GCP project, link billing, create GCS state bucket) before the agents can begin writing and applying Terraform.
 
 ---
 
 ## 4. Next Steps
 *Direct actionable items for the next agent run.*
-1. [ ] **Step 1**: Initialize the frontend project (e.g., Vite/React or Next.js static) in a feature branch.
-2. [ ] **Step 2**: Configure the testing framework.
-3. [ ] **Step 3**: Scaffold the 5 core pages as defined in `PRD.md`.
+1. [ ] **Step 1**: Await confirmation from the user that the GCP project and GCS terraform state bucket exist.
+2. [ ] **Step 2**: Initialize the `terraform/` directory and create the foundational `main.tf` and `variables.tf` files.
+3. [ ] **Step 3**: Define the necessary API enablers, Service Accounts, and Firestore database in Terraform.
 
 ---
 
 ## 5. Modified Files List
-- `[MODIFY]` `docs/PRD.md`
+- `[MODIFY]` `docs/ROADMAP.md`
 - `[MODIFY]` `docs/ARCHITECTURE.md`
 - `[MODIFY]` `docs/ADR.md`
 - `[MODIFY]` `docs/GUIDELINES.md`
-- `[MODIFY]` `docs/ROADMAP.md`
-- `[NEW]` `docs/DATA_PIPELINE.md`
+- `[MODIFY]` `docs/HANDOFF.md`

@@ -6,16 +6,22 @@
 
 ## 1. Milestones Overview
 
+- [ ] **Milestone 0: Technical Architecture & IaC Foundation** (Target: YYYY-MM-DD)
+  - Detail every GCP component and network layer.
+  - Setup Terraform repository structure and remote state bucket.
+  - Provision GCP project, IAM roles, Secret Manager, Cloud DNS, and Firestore via IaC.
+  - Set up CI/CD pipelines for Terraform (Plan/Apply).
 - [ ] **Milestone 1: Project Setup & Static UI** (Target: YYYY-MM-DD)
-  - Firebase Hosting setup.
+  - Firebase Hosting initialization via Terraform/Firebase CLI.
   - Implement the 5 core pages with mock data (Stock, House-building, Policy, Fact-Checking, Methodology).
 - [ ] **Milestone 2: Data Pipeline & Cloud Functions** (Target: YYYY-MM-DD)
+  - Provision Cloud Functions and Cloud Scheduler via Terraform.
   - Create the daily Cloud Function scraper.
   - Integrate Vertex AI/Gemini for fact-checking news snippets.
-  - Implement Firestore schema and writes.
 - [ ] **Milestone 3: Integration, Testing & Launch** (Target: YYYY-MM-DD)
   - Connect UI to live Firestore data.
   - Perform OWASP security review.
+  - Configure custom domain mapping and DNS cutover via IaC.
   - Run performance profiling to hit the 2s load time target.
 
 ---
@@ -23,23 +29,21 @@
 ## 2. Active Backlog
 
 ### In Progress
-- [ ] **TSK-001**: Set up basic Firebase project and local emulation environment.
+- [ ] **TSK-001**: Define comprehensive IaC strategy and expand `ARCHITECTURE.md` with explicit GCP component layers.
 
 ### Todo (Planned for Current Milestone)
-- [ ] **TSK-002**: Create `Current Stock` UI page with mock graphs (detached, semi-detached, etc.).
-- [ ] **TSK-003**: Create `House-building` UI page with 30-year timeline graphs.
-- [ ] **TSK-004**: Create `Current Policy` UI page for government snippet display.
-- [ ] **TSK-005**: Create `News Fact-Checking` UI page showing source reference, reliability score, and AI justification.
-- [ ] **TSK-006**: Set up automated unit test framework and CI/CD PR checks.
+- [ ] **TSK-002**: Create foundational GCP project, link billing, and enable required APIs (Click-ops/Manual step documented in `ARCHITECTURE.md`).
+- [ ] **TSK-003**: Set up Terraform backend (GCS bucket) and directory structure.
+- [ ] **TSK-004**: Write Terraform definitions for Cloud DNS, Firestore, and IAM Service Accounts.
+- [ ] **TSK-005**: Deploy foundational infrastructure and configure GitHub Actions for Terraform CI/CD.
 
 ### Backlog (Future Milestones)
-- [ ] **TSK-010**: Build autonomous source discovery agent.
+- [ ] **TSK-010**: Scaffold static UI on top of Firebase Hosting.
 - [ ] **TSK-011**: Build daily news scraper targeting gov.uk and housing news sites.
-- [ ] **TSK-012**: Write Vertex AI integration for reliability scoring and qualitative accuracy judgement.
-- [ ] **TSK-013**: Review open-source LLM alternatives (e.g., Llama 3) for potential cost/accuracy benefits over Gemini.
+- [ ] **TSK-012**: Provision Cloud Scheduler and Cloud Functions via Terraform.
 
 ---
 
 ## 3. Completed Tasks
 
-- [x] **TSK-000**: Define UK Housing platform architecture and product specs. *(Completed: 2026-07-04)*
+- [x] **TSK-000**: Define UK Housing platform product specs (`PRD.md`). *(Completed: 2026-07-04)*

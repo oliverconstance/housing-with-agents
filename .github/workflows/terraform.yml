@@ -1,0 +1,109 @@
+name: 'Terraform CI/CD'
+
+# The `on` block defines the triggers for this workflow.
+on:
+  # Triggers when code is pushed directly to the `main` branch.
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
+  # Triggers when a Pull Request is opened or updated targeting the `main` branch.
+  pull_request:
+    paths:
+      - 'terraform/**'
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest # Uses a standard Ubuntu runner provided by GitHub
+    defaults:
+      run:
+        # All run commands will execute inside the production terraform directory.
+        working-directory: terraform/envs/prod
+
+    steps:
+    # Step 1: Download the source code onto the runner.
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # Step 2: Authenticate with Google Cloud.
+    # CI/CD pipelines need a way to prove who they are to Google Cloud.
+    # Best practice is Workload Identity Federation (WIF), which avoids storing long-lived JSON keys.
+    - name: Google Auth
+      id: auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        # We pass the credential securely via GitHub Secrets.
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    # Step 3: Install the Terraform CLI on the runner.
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    # Step 4: Terraform Init
+    # Initializes the working directory containing Terraform configuration files.
+    # It downloads the required provider plugins (Google/Google-Beta) and connects to the GCS remote state bucket.
+    - name: Terraform Init
+      id: init
+      run: terraform init -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}"
+
+    # Step 5: Terraform Format Check
+    # Ensures all code adheres to the standard HCL styling conventions. 
+    # If the code is messy, this step fails, enforcing clean code in our repo.
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt -check
+
+    # Step 6: Terraform Plan (The "Dry Run")
+    # This is critical for safety. It compares the desired state (your code) against the current real-world state,
+    # and calculates exactly what it will create, modify, or destroy.
+    # Notice this `if` condition: it ONLY runs on Pull Requests.
+    - name: Terraform Plan
+      id: plan
+      if: github.event_name == 'pull_request'
+      run: terraform plan -no-color -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="domain_name=${{ secrets.DOMAIN_NAME }}"
+      continue-on-error: true # We want the workflow to continue so we can post the error message to the PR.
+
+    # Step 7: Update Pull Request
+    # This automatically takes the output of the "Plan" step above and posts it as a comment on the GitHub Pull Request.
+    # This allows human reviewers to see exactly what infra will change before they click "Merge".
+    - name: Update Pull Request
+      uses: actions/github-script@v7
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+          
+          <details><summary>Show Plan</summary>
+          
+          \`\`\`\n
+          ${process.env.PLAN}
+          \`\`\`
+          
+          </details>`;
+            
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+
+    # Step 8: Fail the pipeline if the Plan failed.
+    - name: Terraform Plan Status
+      if: steps.plan.outcome == 'failure'
+      run: exit 1
+
+    # Step 9: Terraform Apply (The Execution)
+    # This actually provisions the resources in Google Cloud.
+    # Notice the `if` condition: This ONLY runs when code is merged/pushed to the `main` branch.
+    # It uses `-auto-approve` because human review already happened during the Pull Request phase.
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="domain_name=${{ secrets.DOMAIN_NAME }}"
