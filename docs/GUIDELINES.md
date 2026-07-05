@@ -58,3 +58,13 @@
 ### 4.2 SEO
 - Use semantic tags (`<article>`, `<section>`, `<h1>`).
 - Ensure every page (Stock, House-building, Policy, Fact-Checking) has distinct, descriptive `<title>` and `<meta name="description">` tags to capture search traffic for "UK housing facts and figures".
+
+---
+
+## 5. AI Agent Workflows
+
+### 5.1 Committing and Pushing
+- To increase productivity, the AI Assistant must **proactively run terminal commands to commit and push changes** to GitHub directly.
+- The AI should not wait for the user to execute `git add`, `git commit`, and `git push` manually if a feature branch has been completed or a bug fix has been applied.
+- All commits should use conventional commit messages (e.g., `feat:`, `fix:`, `docs:`).
+- Always verify the current branch using `git status` to ensure changes are not committed to `main`.
