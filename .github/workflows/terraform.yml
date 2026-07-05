@@ -5,15 +5,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'terraform/**'
-      - 'frontend/**'
-      - 'backend/**'
   pull_request:
-    paths:
-      - 'terraform/**'
-      - 'frontend/**'
-      - 'backend/**'
+    branches:
+      - main
 
 # Required for Workload Identity Federation
 permissions:
