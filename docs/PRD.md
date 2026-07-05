@@ -44,19 +44,24 @@ To build a highly accessible, fast, and secure web platform that automatically c
    - Key statistics and visuals (graphs) on total UK housing.
    - Breakdown capabilities by type (detached, semi-detached, terraced, etc.).
    - Breakdown capabilities by location (regional area, nation, council).
+   - Breakdown capabilities by ownership (owner-occupied, rented, social).
+   - Breakdown capabilities by EPC Band (Energy Performance Certificate rating).
    - Other metrics like average occupancy and average house price.
 2. **House-Building Page**:
    - Timeline graphs and visuals explaining housebuilding levels over the past 30 years.
-   - Breakdowns by location and property type.
-3. **Current Policy Page**:
-   - Key statements and policy snippets summarizing current UK government policy on housing.
+   - Toggle capability to view "Yearly Completions" vs "Cumulative Total".
+   - Breakdowns by location, property type, and developer.
+3. **Current Policy Page (Nested Architecture)**:
+   - `/policy/manifesto`: Visual progress trackers against political pledges (e.g. 1.5M homes target).
+   - `/policy/summaries`: Expandable key statements and policy snippets summarizing current UK government policy (SDLT, Private Landlords).
 4. **News Fact-Checking Page**:
-   - List of key statements made in news/social media/press releases over the past 12 months.
-   - Clear referencing and source linking.
-   - Qualitative judgement on accuracy (generated via ML).
-   - Clear justification linking to source data confirming or denying the claim.
+   - List of key statements made in news/social media/press releases.
+   - Search bar (by politician/keyword) and Verdict filter (True, False, Misleading).
+   - Compact UI mode to handle thousands of records, expanding on click.
+   - Qualitative judgement on accuracy generated via ML, with clear justification linking to source data.
 5. **Methodology & Data Sources Page**:
-   - Explanation of the daily scrape process, source reliability scoring (e.g., Gov.uk considered highly reliable), and ML fact-checking weighting logic to ensure transparency and build trust.
+   - Explanation of the daily scrape process and ML fact-checking weighting logic.
+   - Dynamic, tabular "Indexed Sources" ledger showing every tracked URL, its update frequency, and the timestamp of the last successful scrape.
 
 ### 4.2 Out of Scope
 - User authentication and login (the site is purely public read-only).

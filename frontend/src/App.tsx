@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar';
 import StockPage from './pages/StockPage';
 import BuildingPage from './pages/BuildingPage';
 import FactCheckPage from './pages/FactCheckPage';
-import PolicyPage from './pages/PolicyPage';
+import PolicyLayout from './pages/Policy/PolicyLayout';
 import MethodologyPage from './pages/MethodologyPage';
 
 const App: React.FC = () => {
@@ -15,7 +15,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<StockPage />} />
           <Route path="/building" element={<BuildingPage />} />
-          <Route path="/policy" element={<PolicyPage />} />
+          <Route path="/policy/*" element={<PolicyLayout />} />
           <Route path="/fact-check" element={<FactCheckPage />} />
           <Route path="/methodology" element={<MethodologyPage />} />
         </Routes>

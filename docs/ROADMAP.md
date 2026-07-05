@@ -11,10 +11,11 @@
   - Setup Terraform repository structure and remote state bucket.
   - Provision GCP project, IAM roles, Secret Manager, Cloud DNS, and Firestore via IaC.
   - Set up CI/CD pipelines for Terraform (Plan/Apply).
-- [ ] **Milestone 1: Project Setup & Static UI** (Target: YYYY-MM-DD)
+- [x] **Milestone 1: Project Setup & Static UI** (Completed)
   - Firebase Hosting initialization via Terraform/Firebase CLI.
   - Implement the 5 core pages with mock data (Stock, House-building, Policy, Fact-Checking, Methodology).
-- [ ] **Milestone 2: Data Pipeline & Cloud Functions** (Target: YYYY-MM-DD)
+  - Implement advanced multi-dimensional filtering, nested routing, and interactive search/archive UI.
+- [ ] **Milestone 2: Data Pipeline & Cloud Functions** (Next Up)
   - Provision Cloud Functions and Cloud Scheduler via Terraform.
   - Create the daily Cloud Function scraper.
   - Integrate Vertex AI/Gemini for fact-checking news snippets.
@@ -29,21 +30,21 @@
 ## 2. Active Backlog
 
 ### In Progress
-- [ ] **TSK-001**: Define comprehensive IaC strategy and expand `ARCHITECTURE.md` with explicit GCP component layers.
-
-### Todo (Planned for Current Milestone)
-- [ ] **TSK-002**: Create foundational GCP project, link billing, and enable required APIs (Click-ops/Manual step documented in `ARCHITECTURE.md`).
-- [ ] **TSK-003**: Set up Terraform backend (GCS bucket) and directory structure.
-- [ ] **TSK-004**: Write Terraform definitions for Cloud DNS, Firestore, and IAM Service Accounts.
-- [ ] **TSK-005**: Deploy foundational infrastructure and configure GitHub Actions for Terraform CI/CD.
-
-### Backlog (Future Milestones)
-- [ ] **TSK-010**: Scaffold static UI on top of Firebase Hosting.
 - [ ] **TSK-011**: Build daily news scraper targeting gov.uk and housing news sites.
 - [ ] **TSK-012**: Provision Cloud Scheduler and Cloud Functions via Terraform.
+
+### Todo (Planned for Current Milestone)
+- [ ] **TSK-013**: Integrate Vertex AI/Gemini pipeline for fact-checking logic.
+- [ ] **TSK-014**: Connect React frontend to live Firestore data.
+
+### Backlog (Future Milestones)
+- [ ] **TSK-020**: Run performance profiling to hit the 2s load time target.
+- [ ] **TSK-021**: Configure custom domain mapping (`housinginsights.uk`).
 
 ---
 
 ## 3. Completed Tasks
+
+- [x] **TSK-010**: Scaffold static UI on top of Firebase Hosting, including advanced filtering and sub-routing. *(Completed: 2026-07-05)*
 
 - [x] **TSK-000**: Define UK Housing platform product specs (`PRD.md`). *(Completed: 2026-07-04)*
