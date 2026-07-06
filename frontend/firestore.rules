@@ -1,0 +1,13 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access to the factChecks collection
+    match /factChecks/{document} {
+      allow read: if true;
+      // Writes are strictly denied from the client.
+      // The backend Cloud Function bypasses these rules using the Admin SDK.
+      allow write: if false;
+    }
+  }
+}
