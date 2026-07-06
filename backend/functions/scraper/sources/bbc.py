@@ -29,7 +29,16 @@ def scrape_bbc_news() -> List[Claim]:
             title = item.find('title').text if item.find('title') is not None else ""
             description = item.find('description').text if item.find('description') is not None else ""
             link = item.find('link').text if item.find('link') is not None else ""
-            pub_date = item.find('pubDate').text if item.find('pubDate') is not None else datetime.datetime.utcnow().isoformat() + "Z"
+            
+            pub_date_str = item.find('pubDate').text if item.find('pubDate') is not None else ""
+            pub_date = datetime.datetime.utcnow().isoformat() + "Z"
+            if pub_date_str:
+                try:
+                    from email.utils import parsedate_to_datetime
+                    dt = parsedate_to_datetime(pub_date_str)
+                    pub_date = dt.isoformat()
+                except Exception:
+                    pass
             
             # Check if any keyword is in title or description
             text_to_check = (title + " " + description).lower()

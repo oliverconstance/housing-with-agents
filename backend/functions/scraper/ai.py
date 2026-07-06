@@ -24,6 +24,7 @@ You MUST return a JSON object exactly matching this schema:
     { "sourceId": "string", "dataPointUrl": "URL", "description": "string" }
   ]
 }
+CRITICAL REQUIREMENT: Your 'justification' must be supported by a minimum of TWO official sources. Ensure the 'references' array contains at least 2 valid, distinct sources with verifiable URLs.
 """
 
 def analyze_claim(statement: str, context: str) -> dict:

@@ -35,11 +35,19 @@ def scrape_inside_housing() -> List[Claim]:
                     link = f"https://www.insidehousing.co.uk{link}"
                 
                 # We use the title as the statement since full text is often paywalled
+                # For Inside Housing, date might be in a time tag or span. For now, default to today's date if not found.
+                date_made_str = ""
+                time_tag = heading.find_next_sibling('time')
+                if time_tag and time_tag.has_attr('datetime'):
+                    date_made_str = time_tag['datetime']
+                
+                date_made = date_made_str if date_made_str else datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0).isoformat() + "Z"
+                
                 claims.append(Claim(
                     statement=title,
                     speaker=Speaker(type="journalist", name="Inside Housing Journalist", affiliation="Inside Housing"),
                     context="News headline",
-                    dateMade=datetime.datetime.utcnow().isoformat() + "Z",
+                    dateMade=date_made,
                     sourceUrl=link
                 ))
                 count += 1

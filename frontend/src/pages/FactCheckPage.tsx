@@ -24,11 +24,14 @@ const FactCheckPage: React.FC = () => {
           if (data.claim && data.analysis) {
              fetchedData.push({
                politician: data.claim.speaker?.name || 'Unknown',
+               speakerType: data.claim.speaker?.type || '',
+               affiliation: data.claim.speaker?.affiliation || '',
                quote: data.claim.statement || '',
                date: data.claim.dateMade || '',
                verdict: data.analysis.verdict as Verdict,
                analysis: data.analysis.justification || '',
-               sourceUrl: data.claim.sourceUrl || '#'
+               sourceUrl: data.claim.sourceUrl || '#',
+               references: data.analysis.references || []
              });
           }
         });
