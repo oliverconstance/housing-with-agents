@@ -162,3 +162,22 @@ a:hover {
   }
 }
 
+/* Details and Summary styling */
+details > summary {
+  list-style: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] summary ~ * {
+  animation: sweep .3s ease-in-out;
+}
+
+@keyframes sweep {
+  0%    {opacity: 0; transform: translateY(-5px)}
+  100%  {opacity: 1; transform: translateY(0)}
+}
