@@ -52,8 +52,11 @@ To build a highly accessible, fast, and secure web platform that automatically c
    - Toggle capability to view "Yearly Completions" vs "Cumulative Total".
    - Breakdowns by location, property type, and developer.
 3. **Current Policy Page (Nested Architecture)**:
-   - `/policy/manifesto`: Visual progress trackers against political pledges (e.g. 1.5M homes target).
-   - `/policy/summaries`: Expandable key statements and policy snippets summarizing current UK government policy (SDLT, Private Landlords).
+   - `/policy/manifesto`: Visual progress trackers against core standard UK government pledges, specifically:
+     - **1.5M Homes Target**: Progress bar tracking total cumulative completions over the parliamentary term against the 1,500,000 target.
+     - **Planning Reform**: Metric tracking the number of additional local planning officers hired (target: 300).
+     - **Affordable Homes**: Tracker for the delivery of the promised new generation of new towns and social rent homes.
+   - `/policy/summaries`: Expandable key statements and policy snippets summarizing current UK government policy (e.g. Renters' Rights Bill, Leasehold reform, SDLT).
 4. **News Fact-Checking Page**:
    - List of key statements made in news/social media/press releases.
    - Search bar (by politician/keyword) and Verdict filter (True, False, Misleading).

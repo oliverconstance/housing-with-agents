@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAnalytics } from "firebase/analytics";
+import { getPerformance } from "firebase/performance";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzHUl8K3ByRKBR8syuZPVByHR7jcIE6D0",
@@ -14,3 +16,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+
+// Initialize Analytics & Performance (only runs if window is defined / browser environment)
+export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+export const perf = typeof window !== 'undefined' ? getPerformance(app) : null;

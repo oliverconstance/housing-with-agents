@@ -30,15 +30,17 @@
 ## 2. Active Backlog
 
 ### In Progress
-- [ ] **TSK-030**: Set up automated frontend testing (Vitest/React Testing Library) and integrate into CI/CD.
+- [x] **TSK-030**: Set up automated frontend testing (Vitest/React Testing Library) and integrate into CI/CD. *(Completed: 2026-07-06)*
 - [ ] **TSK-034**: Provision a staging environment (`envs/staging`) in Terraform to isolate development testing.
 
 ### Todo (Planned for Current Milestone)
 - [ ] **TSK-020**: Run performance profiling to hit the 2s load time target.
-- [ ] **TSK-021**: Configure custom domain mapping (`housinginsights.uk`).
+- [x] **TSK-021**: Configure custom domain mapping (`housinginsights.uk`). *(Completed: 2026-07-06)*
 
 ### Backlog (Future Milestones & Audit Recommendations)
-- [ ] **TSK-036**: Initialize Firebase Analytics (GA4) & Performance Monitoring SDKs in the React frontend (`main.tsx`).
+- [x] **TSK-036**: Initialize Firebase Analytics (GA4) & Performance Monitoring SDKs in the React frontend (`main.tsx` / `firebase.ts`). *(Completed: 2026-07-06)*
+- [x] **TSK-037**: Fix missing Firebase Security Rules causing "0 Results" bug on Fact Checking page. *(Completed: 2026-07-06)*
+- [x] **TSK-038**: Implement standard UK Government Policy Pledge Tracking (e.g. 1.5M homes, planning reform) on the Policy page. *(Completed: 2026-07-06)*
 
 ---
 
