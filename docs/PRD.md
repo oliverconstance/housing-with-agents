@@ -40,28 +40,27 @@ To build a highly accessible, fast, and secure web platform that automatically c
 
 ### 4.1 Core Pages (In-Scope)
 
-1. **Current Stock Page**: 
+1. **About / Warning Page**: 
+   - A highly visible warning page at the top of the navigation.
+   - Explains that the platform is a research project on agentic development using UK housing policy as a subject area.
+   - Explicitly states that none of the information on the platform should be considered validated or trusted at this time.
+2. **Current Stock Page**: 
    - Key statistics and visuals (graphs) on total UK housing.
    - Breakdown capabilities by type (detached, semi-detached, terraced, etc.).
    - Breakdown capabilities by location (regional area, nation, council).
    - Breakdown capabilities by ownership (owner-occupied, rented, social).
    - Breakdown capabilities by EPC Band (Energy Performance Certificate rating).
    - Other metrics like average occupancy and average house price.
-2. **House-Building Page**:
+3. **House-Building Page**:
    - Timeline graphs and visuals explaining housebuilding levels over the past 30 years.
    - Toggle capability to view "Yearly Completions" vs "Cumulative Total".
    - Breakdowns by location, property type, and developer.
-3. **Current Policy Page (Nested Architecture)**:
+4. **Current Policy Page (Nested Architecture)**:
    - `/policy/manifesto`: Visual progress trackers against core standard UK government pledges, specifically:
      - **1.5M Homes Target**: Progress bar tracking total cumulative completions over the parliamentary term against the 1,500,000 target.
      - **Planning Reform**: Metric tracking the number of additional local planning officers hired (target: 300).
      - **Affordable Homes**: Tracker for the delivery of the promised new generation of new towns and social rent homes.
    - `/policy/summaries`: Expandable key statements and policy snippets summarizing current UK government policy (e.g. Renters' Rights Bill, Leasehold reform, SDLT).
-4. **News Fact-Checking Page**:
-   - List of key statements made in news/social media/press releases.
-   - Search bar (by politician/keyword) and Verdict filter (True, False, Misleading).
-   - Compact UI mode to handle thousands of records, expanding on click.
-   - Qualitative judgement on accuracy generated via ML, with clear justification linking to source data.
 5. **Methodology & Data Sources Page**:
    - Explanation of the daily scrape process and ML fact-checking weighting logic.
    - Dynamic, tabular "Indexed Sources" ledger showing every tracked URL, its update frequency, and the timestamp of the last successful scrape.

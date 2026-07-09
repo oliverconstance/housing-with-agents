@@ -34,10 +34,18 @@
 - [ ] **TSK-034**: Provision a staging environment (`envs/staging`) in Terraform to isolate development testing.
 
 ### Todo (Planned for Current Milestone)
+- [ ] **TSK-039**: Create About page and hide Fact Checking page due to severe bugs.
+- [ ] **TSK-040**: Fix FactTooltip disappearing on hover.
+- [ ] **TSK-041**: Stabilize Current Stock Recharts Y-axis scaling.
+- [ ] **TSK-042**: Build MHCLG Stock Data scraper (`mhclg_stock.py`) for the backend pipeline.
 - [ ] **TSK-020**: Run performance profiling to hit the 2s load time target.
 - [x] **TSK-021**: Configure custom domain mapping (`housinginsights.uk`). *(Completed: 2026-07-06)*
 
 ### Backlog (Future Milestones & Audit Recommendations)
+- [ ] **BUG-001**: Fact Checking provides inaccurate information.
+- [ ] **BUG-002**: Fact Checking models are out of date for validating info.
+- [ ] **BUG-003**: QA tests for Fact Checking are not validating correctness.
+- [ ] **BUG-004**: Misleading labels on Fact Checking page.
 - [x] **TSK-036**: Initialize Firebase Analytics (GA4) & Performance Monitoring SDKs in the React frontend (`main.tsx` / `firebase.ts`). *(Completed: 2026-07-06)*
 - [x] **TSK-037**: Fix missing Firebase Security Rules causing "0 Results" bug on Fact Checking page. *(Completed: 2026-07-06)*
 - [x] **TSK-038**: Implement standard UK Government Policy Pledge Tracking (e.g. 1.5M homes, planning reform) on the Policy page. *(Completed: 2026-07-06)*

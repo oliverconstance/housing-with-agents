@@ -36,6 +36,7 @@ const TimelineChart: React.FC<TimelineChartProps> = ({ data, xKey, yKey, title, 
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) => `${(value / 1000)}k`}
+              domain={[0, 'auto']}
             />
             <Tooltip 
               contentStyle={{ 
