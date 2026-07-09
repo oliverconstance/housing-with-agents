@@ -63,7 +63,7 @@ const StockPage: React.FC = () => {
       <FilterBar filters={stockFilters} onFilterChange={handleFilterChange} />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
-        <FactTooltip sourceText="ONS Dwelling Stock Estimates (Table 104)" sourceUrl="#">
+        <FactTooltip sourceText="ONS Dwelling Stock Estimates (Table 104)" sourceUrl="https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants">
           <DataCard 
             title="Filtered Dwellings" 
             value={`${dynamicTotal}M`} 
@@ -74,7 +74,7 @@ const StockPage: React.FC = () => {
           />
         </FactTooltip>
         
-        <FactTooltip sourceText="English Housing Survey 2025/26" sourceUrl="#">
+        <FactTooltip sourceText="English Housing Survey" sourceUrl="https://www.gov.uk/government/collections/english-housing-survey">
           <DataCard 
             title="Owner Occupied" 
             value="64.2%" 
@@ -85,7 +85,7 @@ const StockPage: React.FC = () => {
           />
         </FactTooltip>
 
-        <FactTooltip sourceText="Regulator of Social Housing" sourceUrl="#">
+        <FactTooltip sourceText="Regulator of Social Housing" sourceUrl="https://www.gov.uk/government/organisations/regulator-of-social-housing">
           <DataCard 
             title="Social Rented" 
             value="16.8%" 
@@ -96,7 +96,7 @@ const StockPage: React.FC = () => {
           />
         </FactTooltip>
 
-        <FactTooltip sourceText="English Housing Survey 2025/26" sourceUrl="#">
+        <FactTooltip sourceText="English Housing Survey" sourceUrl="https://www.gov.uk/government/collections/english-housing-survey">
           <DataCard 
             title="Private Rented" 
             value="19.0%" 
