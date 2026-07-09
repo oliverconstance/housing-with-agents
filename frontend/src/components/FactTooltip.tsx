@@ -28,45 +28,49 @@ const FactTooltip: React.FC<FactTooltipProps> = ({ children, sourceText, sourceU
           bottom: '100%',
           left: '50%',
           transform: 'translateX(-50%)',
-          marginBottom: '8px',
-          padding: '0.75rem 1rem',
-          backgroundColor: 'var(--bg-sidebar)',
-          border: 'var(--glass-border)',
-          borderRadius: '8px',
-          boxShadow: 'var(--glass-shadow)',
+          paddingBottom: '8px', // Invisible bridge to prevent mouseleave
           zIndex: 1000,
-          minWidth: '220px',
-          textAlign: 'center'
+          minWidth: '220px'
         }}>
-          <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-            Source Reference
-          </p>
-          <a 
-            href={sourceUrl} 
-            target="_blank" 
-            rel="noreferrer"
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              gap: '0.25rem',
-              fontSize: '0.85rem',
-              fontWeight: 600
-            }}
-          >
-            {sourceText} <ExternalLink size={14} />
-          </a>
-          
-          {/* Tooltip arrow */}
           <div style={{
-            position: 'absolute',
-            top: '100%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            borderWidth: '6px',
-            borderStyle: 'solid',
-            borderColor: 'var(--bg-sidebar) transparent transparent transparent'
-          }}></div>
+            padding: '0.75rem 1rem',
+            backgroundColor: 'var(--bg-sidebar)',
+            border: 'var(--glass-border)',
+            borderRadius: '8px',
+            boxShadow: 'var(--glass-shadow)',
+            textAlign: 'center',
+            position: 'relative'
+          }}>
+            <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+              Source Reference
+            </p>
+            <a 
+              href={sourceUrl} 
+              target="_blank" 
+              rel="noreferrer"
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                gap: '0.25rem',
+                fontSize: '0.85rem',
+                fontWeight: 600
+              }}
+            >
+              {sourceText} <ExternalLink size={14} />
+            </a>
+            
+            {/* Tooltip arrow */}
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              borderWidth: '6px',
+              borderStyle: 'solid',
+              borderColor: 'var(--bg-sidebar) transparent transparent transparent'
+            }}></div>
+          </div>
         </div>
       )}
     </div>

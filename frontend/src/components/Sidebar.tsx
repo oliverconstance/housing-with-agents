@@ -8,7 +8,8 @@ import {
   CheckCircle, 
   Database,
   Moon,
-  Sun
+  Sun,
+  Info
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -22,6 +23,11 @@ const Sidebar: React.FC = () => {
       </div>
 
       <nav className="sidebar-nav">
+        <NavLink to="/about" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+          <Info size={20} color="var(--accent-danger)" />
+          <span style={{ color: 'var(--accent-danger)', fontWeight: 600 }}>About (Warning)</span>
+        </NavLink>
+
         <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <Home size={20} />
           <span>Current Stock</span>
@@ -37,10 +43,11 @@ const Sidebar: React.FC = () => {
           <span>Policy Tracker</span>
         </NavLink>
         
+        {/* Fact-Checking link temporarily hidden due to bugs
         <NavLink to="/fact-check" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <CheckCircle size={20} />
           <span>Fact-Checking</span>
-        </NavLink>
+        </NavLink> */}
 
         <NavLink to="/methodology" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <Database size={20} />
