@@ -5,7 +5,6 @@ import {
   Home, 
   TrendingUp, 
   BookOpen, 
-  CheckCircle, 
   Database,
   Moon,
   Sun,
