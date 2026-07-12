@@ -12,43 +12,48 @@ import {
 } from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <aside className="sidebar glass-panel">
+    <aside className={`sidebar glass-panel ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <h2>UK Housing Data</h2>
       </div>
 
       <nav className="sidebar-nav">
-        <NavLink to="/about" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        <NavLink to="/about" onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <Info size={20} color="var(--accent-danger)" />
           <span style={{ color: 'var(--accent-danger)', fontWeight: 600 }}>About (Warning)</span>
         </NavLink>
 
-        <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        <NavLink to="/" onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <Home size={20} />
           <span>Current Stock</span>
         </NavLink>
         
-        <NavLink to="/building" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        <NavLink to="/building" onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <TrendingUp size={20} />
           <span>House-building</span>
         </NavLink>
         
-        <NavLink to="/policy" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        <NavLink to="/policy" onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <BookOpen size={20} />
           <span>Policy Tracker</span>
         </NavLink>
         
         {/* Fact-Checking link temporarily hidden due to bugs
-        <NavLink to="/fact-check" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        <NavLink to="/fact-check" onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <CheckCircle size={20} />
           <span>Fact-Checking</span>
         </NavLink> */}
 
-        <NavLink to="/methodology" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        <NavLink to="/methodology" onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <Database size={20} />
           <span>Methodology</span>
         </NavLink>

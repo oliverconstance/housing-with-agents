@@ -56,3 +56,19 @@
   padding: 1.5rem;
   border-top: var(--glass-border);
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    height: 100vh;
+    left: 0;
+    top: 0;
+    transform: translateX(-120%);
+    transition: transform 0.3s ease;
+    border-radius: 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
