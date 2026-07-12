@@ -1,7 +1,4 @@
 import os
-import requests
-import pandas as pd
-from bs4 import BeautifulSoup
 from google.cloud import firestore
 import logging
 from datetime import datetime, timezone
@@ -122,7 +119,9 @@ if __name__ == "__main__":
     # Test execution
     data = fetch_mhclg_stock_data()
     refs = generate_references()
-    # Uncomment to actually save to a local emulator or live project
-    # save_to_firestore(data, refs)
+    
+    # Save to firestore
+    save_to_firestore(data, refs)
+    
     print("Stock Data:", data)
     print("References:", refs)
