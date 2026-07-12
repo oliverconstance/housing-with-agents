@@ -45,12 +45,12 @@ To build a highly accessible, fast, and secure web platform that automatically c
    - Explains that the platform is a research project on agentic development using UK housing policy as a subject area.
    - Explicitly states that none of the information on the platform should be considered validated or trusted at this time.
 2. **Current Stock Page**: 
-   - Key statistics and visuals (graphs) on total UK housing.
-   - Breakdown capabilities by type (detached, semi-detached, terraced, etc.).
-   - Breakdown capabilities by location (regional area, nation, council).
+   - Key statistics and visual breakdowns (e.g., Pie/Bar charts) on total UK housing stock, moving away from timeline/growth views.
+   - Breakdown capabilities by detailed type (Houses: Detached, Semi-Detached, Terraced; Flats: Purpose-built, Converted, Maisonette; Bungalows).
+   - Breakdown capabilities by location (UK total, regional area, nation, council).
    - Breakdown capabilities by ownership (owner-occupied, rented, social).
    - Breakdown capabilities by EPC Band (Energy Performance Certificate rating).
-   - Other metrics like average occupancy and average house price.
+   - **Data Validation Requirement**: Every single data point displayed on this page must be supported by a minimum of 2 sources. Tooltips must link to the References Page via unique IDs.
 3. **House-Building Page**:
    - Timeline graphs and visuals explaining housebuilding levels over the past 30 years.
    - Toggle capability to view "Yearly Completions" vs "Cumulative Total".
@@ -61,7 +61,11 @@ To build a highly accessible, fast, and secure web platform that automatically c
      - **Planning Reform**: Metric tracking the number of additional local planning officers hired (target: 300).
      - **Affordable Homes**: Tracker for the delivery of the promised new generation of new towns and social rent homes.
    - `/policy/summaries`: Expandable key statements and policy snippets summarizing current UK government policy (e.g. Renters' Rights Bill, Leasehold reform, SDLT).
-5. **Methodology & Data Sources Page**:
+5. **References Page**:
+   - A comprehensive table listing all data sources used across the platform.
+   - Columns must include: Website, Document Name, Version, Author, Last Accessed Date/Time, and a Unique ID (e.g., REF-001).
+   - Each row must have an anchor link allowing tooltips from other pages to link directly to it.
+6. **Methodology & Data Sources Page**:
    - Explanation of the daily scrape process and ML fact-checking weighting logic.
    - Dynamic, tabular "Indexed Sources" ledger showing every tracked URL, its update frequency, and the timestamp of the last successful scrape.
 6. **Site Analytics & Performance Tracking**:

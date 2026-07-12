@@ -1,83 +1,120 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 import DataCard from '../components/DataCard';
-import { Home, Map, Building2, TrendingUp } from 'lucide-react';
-import TimelineChart from '../components/TimelineChart';
+import { Home, Map, Building2, TrendingUp, RefreshCw } from 'lucide-react';
 import FilterBar from '../components/FilterBar';
 import FactTooltip from '../components/FactTooltip';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const baseChartData = [
-  { year: '2022', stock: 25000000 },
-  { year: '2023', stock: 25200000 },
-  { year: '2024', stock: 25420000 },
-  { year: '2025', stock: 25580000 },
-  { year: 'Jul 2026', stock: 25710000 },
-];
+interface StockData {
+  id: string;
+  region: string;
+  total_stock: number;
+  breakdown_type: {
+    Houses: { Detached: number; 'Semi-Detached': number; Terraced: number; [key: string]: number };
+    Flats: { 'Purpose-built': number; Converted: number; Maisonette: number; [key: string]: number };
+    Bungalows: number;
+    [key: string]: any;
+  };
+  breakdown_ownership: {
+    'owner-occupied': number;
+    'private-rented': number;
+    'social-rented': number;
+    [key: string]: number;
+  };
+  reference_ids: string[];
+}
 
-const stockFilters = [
-  { label: 'Region', options: ['England', 'Wales', 'Scotland', 'Northern Ireland', 'London'] },
-  { label: 'Type', options: ['Detached', 'Semi-Detached', 'Terraced', 'Flat/Maisonette'] },
-  { label: 'Ownership', options: ['Owner Occupied', 'Private Rented', 'Social Rented'] },
-  { label: 'EPC Band', options: ['A/B', 'C', 'D', 'E', 'F/G'] }
-];
+const COLORS = ['#0ea5e9', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#64748b'];
 
 const StockPage: React.FC = () => {
-  const [filterState, setFilterState] = useState<Record<string, string>>({});
+  const [data, setData] = useState<StockData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filterState, setFilterState] = useState<Record<string, string>>({ Region: 'UK Total' });
+
+  useEffect(() => {
+    const fetchStockData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'stock_data'));
+        const stockData: StockData[] = [];
+        querySnapshot.forEach((doc) => {
+          stockData.push(doc.data() as StockData);
+        });
+        setData(stockData);
+      } catch (error) {
+        console.error("Error fetching stock data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStockData();
+  }, []);
 
   const handleFilterChange = (label: string, value: string) => {
     setFilterState(prev => ({ ...prev, [label]: value }));
   };
 
-  // Fake "data shaker" to simulate reactivity to filters
-  const getMultiplierForValue = (val: string | undefined) => {
-    if (!val || val === 'all') return 1;
-    let hash = 0;
-    for (let i = 0; i < val.length; i++) {
-      hash += val.charCodeAt(i);
-    }
-    return 0.2 + ((hash % 70) / 100); 
-  };
+  const selectedData = data.find(d => d.region === filterState['Region']) || data.find(d => d.region === 'UK Total');
 
-  const mockMultiplier = useMemo(() => {
-    let mult = 1;
-    mult *= getMultiplierForValue(filterState['Region']);
-    mult *= getMultiplierForValue(filterState['Type']);
-    mult *= getMultiplierForValue(filterState['Ownership']);
-    mult *= getMultiplierForValue(filterState['EPC Band']);
-    return mult;
-  }, [filterState]);
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+        <RefreshCw size={24} className="animate-spin" style={{ color: 'var(--accent-primary)' }} />
+        <span style={{ marginLeft: '1rem', color: 'var(--text-secondary)' }}>Loading Stock Data...</span>
+      </div>
+    );
+  }
 
-  const dynamicChartData = baseChartData.map(d => ({
-    year: d.year,
-    stock: Math.round(d.stock * mockMultiplier)
-  }));
+  if (!selectedData) {
+    return <div>No stock data found. Run backend scraper.</div>;
+  }
 
-  const dynamicTotal = (25.71 * mockMultiplier).toFixed(2);
+  const ownershipData = [
+    { name: 'Owner Occupied', value: selectedData.breakdown_ownership['owner-occupied'] },
+    { name: 'Private Rented', value: selectedData.breakdown_ownership['private-rented'] },
+    { name: 'Social Rented', value: selectedData.breakdown_ownership['social-rented'] }
+  ];
+
+  const typeData = [
+    { name: 'Detached', value: selectedData.breakdown_type.Houses.Detached },
+    { name: 'Semi-Detached', value: selectedData.breakdown_type.Houses['Semi-Detached'] },
+    { name: 'Terraced', value: selectedData.breakdown_type.Houses.Terraced },
+    { name: 'Purpose Flats', value: selectedData.breakdown_type.Flats['Purpose-built'] },
+    { name: 'Converted/Maisonette', value: selectedData.breakdown_type.Flats.Converted + selectedData.breakdown_type.Flats.Maisonette },
+    { name: 'Bungalows', value: selectedData.breakdown_type.Bungalows }
+  ].sort((a, b) => b.value - a.value);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h1 style={{ marginBottom: '0.5rem' }}>Current UK Housing Stock</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>Live tracker of total dwellings across the United Kingdom.</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Live tracker of total dwellings and structural breakdowns.</p>
       </div>
 
-      <FilterBar filters={stockFilters} onFilterChange={handleFilterChange} />
+      <FilterBar 
+        filters={[
+          { label: 'Region', options: ['UK Total', 'England'] }
+        ]} 
+        onFilterChange={handleFilterChange} 
+      />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
-        <FactTooltip sourceText="ONS Dwelling Stock Estimates (Table 104)" sourceUrl="https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants">
+        <FactTooltip referenceIds={selectedData.reference_ids}>
           <DataCard 
-            title="Filtered Dwellings" 
-            value={`${dynamicTotal}M`} 
-            subtitle="As of Jul 2026 release"
-            trend={mockMultiplier === 1 ? 'up' : 'neutral'}
-            trendValue="Filtered View"
+            title="Total Dwellings" 
+            value={`${(selectedData.total_stock / 1000000).toFixed(2)}M`} 
+            subtitle={selectedData.region}
+            trend="neutral"
+            trendValue="Verified"
             icon={<Home size={24} />}
           />
         </FactTooltip>
         
-        <FactTooltip sourceText="English Housing Survey" sourceUrl="https://www.gov.uk/government/collections/english-housing-survey">
+        <FactTooltip referenceIds={selectedData.reference_ids}>
           <DataCard 
             title="Owner Occupied" 
-            value="64.2%" 
+            value={`${((selectedData.breakdown_ownership['owner-occupied'] / selectedData.total_stock) * 100).toFixed(1)}%`} 
             subtitle="Proportion of total stock"
             trend="down"
             trendValue="0.1% YoY"
@@ -85,10 +122,10 @@ const StockPage: React.FC = () => {
           />
         </FactTooltip>
 
-        <FactTooltip sourceText="Regulator of Social Housing" sourceUrl="https://www.gov.uk/government/organisations/regulator-of-social-housing">
+        <FactTooltip referenceIds={selectedData.reference_ids}>
           <DataCard 
             title="Social Rented" 
-            value="16.8%" 
+            value={`${((selectedData.breakdown_ownership['social-rented'] / selectedData.total_stock) * 100).toFixed(1)}%`} 
             subtitle="Proportion of total stock"
             trend="neutral"
             trendValue="0.0% YoY"
@@ -96,10 +133,10 @@ const StockPage: React.FC = () => {
           />
         </FactTooltip>
 
-        <FactTooltip sourceText="English Housing Survey" sourceUrl="https://www.gov.uk/government/collections/english-housing-survey">
+        <FactTooltip referenceIds={selectedData.reference_ids}>
           <DataCard 
             title="Private Rented" 
-            value="19.0%" 
+            value={`${((selectedData.breakdown_ownership['private-rented'] / selectedData.total_stock) * 100).toFixed(1)}%`} 
             subtitle="Proportion of total stock"
             trend="up"
             trendValue="0.8% YoY"
@@ -108,14 +145,45 @@ const StockPage: React.FC = () => {
         </FactTooltip>
       </div>
 
-      <div style={{ marginTop: '1rem' }}>
-        <TimelineChart 
-          data={dynamicChartData}
-          xKey="year"
-          yKey="stock"
-          title="Total Housing Stock Growth (Filtered View)"
-          color="var(--accent-primary)"
-        />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem', marginTop: '1rem' }}>
+        <div className="glass-panel" style={{ padding: '1.5rem' }}>
+          <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Ownership Breakdown</h3>
+          <div style={{ height: '300px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={ownershipData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {ownershipData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <RechartsTooltip formatter={(value: number) => `${(value / 1000000).toFixed(2)}M`} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="glass-panel" style={{ padding: '1.5rem' }}>
+          <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Property Types</h3>
+          <div style={{ height: '300px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={typeData} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
+                <XAxis type="number" tickFormatter={(val) => `${(val / 1000000).toFixed(1)}M`} />
+                <YAxis dataKey="name" type="category" width={120} tick={{ fontSize: 12 }} />
+                <RechartsTooltip formatter={(value: number) => `${(value / 1000000).toFixed(2)}M`} />
+                <Bar dataKey="value" fill="var(--accent-primary)" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
     </div>
   );
