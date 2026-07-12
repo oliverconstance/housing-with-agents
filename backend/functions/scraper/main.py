@@ -6,6 +6,7 @@ from ai import analyze_claim
 from sources.govuk import scrape_govuk_press_releases
 from sources.bbc import scrape_bbc_news
 from sources.insidehousing import scrape_inside_housing
+from sources.mhclg_stock import fetch_mhclg_stock_data, generate_references, save_to_firestore
 from models import FactCheckRecord
 
 @functions_framework.http
@@ -17,7 +18,13 @@ def run_scraper(request):
     try:
         print("Starting daily housing scraper pipeline...")
         
-        # 1. Gather all claims
+        # --- Update Stock Data & References ---
+        print("Scraping and updating MHCLG stock data and references...")
+        stock_data = fetch_mhclg_stock_data()
+        refs = generate_references()
+        save_to_firestore(stock_data, refs)
+        
+        # --- Gather & Process Claims ---
         all_claims = []
         all_claims.extend(scrape_govuk_press_releases())
         all_claims.extend(scrape_bbc_news())
@@ -28,22 +35,16 @@ def run_scraper(request):
         processed_count = 0
         cached_count = 0
         
-        # 2. Process each claim
         for claim in all_claims:
             statement = claim.statement
-            
-            # NFR: Check cache to prevent duplicate LLM cost
             if is_claim_cached(statement):
                 print(f"Skipping cached claim: '{statement[:30]}...'")
                 cached_count += 1
                 continue
                 
             print(f"Analyzing new claim: '{statement[:30]}...'")
-            
-            # 3. Analyze with Vertex AI
             analysis_data = analyze_claim(statement, claim.context)
             
-            # 4. Save to Firestore (Validating against Pydantic model)
             record = FactCheckRecord(claim=claim, analysis=analysis_data)
             save_fact_check(record.model_dump(), statement)
             
@@ -51,6 +52,7 @@ def run_scraper(request):
             
         summary = {
             "status": "success",
+            "stockRecordsUpdated": len(stock_data),
             "claimsDiscovered": len(all_claims),
             "claimsProcessed": processed_count,
             "claimsSkippedCached": cached_count
