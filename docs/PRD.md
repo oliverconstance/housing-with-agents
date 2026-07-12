@@ -103,3 +103,7 @@ To build a highly accessible, fast, and secure web platform that automatically c
 
 ### 5.6 Transparency & Data Auditability
 - **Crucial Requirement**: Any data stored or presented must maintain a clear referencing and audit trail. Users must see exactly where it came from and how AI models evaluated it.
+
+### 5.7 Cross-Device & Mobile Responsiveness
+- **Layout Adjustments**: The platform must deliver a seamless experience across all standard form factors (mobile, tablet, desktop).
+- **Navigation**: On devices with a screen width of 768px or smaller, the Left Hand Navigation (Sidebar) must collapse into an off-canvas drawer accessed via a hamburger menu. The main content must utilize the full width of the screen.

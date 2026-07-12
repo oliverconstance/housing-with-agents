@@ -181,3 +181,54 @@ details[open] summary ~ * {
   0%    {opacity: 0; transform: translateY(-5px)}
   100%  {opacity: 1; transform: translateY(0)}
 }
+
+/* Mobile Responsiveness */
+.mobile-topbar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--bg-sidebar);
+  border-bottom: var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 95;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .mobile-topbar {
+    display: flex;
+  }
+  
+  .mobile-overlay {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+}
