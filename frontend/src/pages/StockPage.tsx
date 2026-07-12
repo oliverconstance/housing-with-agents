@@ -160,11 +160,11 @@ const StockPage: React.FC = () => {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {ownershipData.map((entry, index) => (
+                  {ownershipData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <RechartsTooltip formatter={(value: number) => `${(value / 1000000).toFixed(2)}M`} />
+                <RechartsTooltip formatter={(value: any) => `${(Number(value) / 1000000).toFixed(2)}M`} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -178,7 +178,7 @@ const StockPage: React.FC = () => {
               <BarChart data={typeData} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
                 <XAxis type="number" tickFormatter={(val) => `${(val / 1000000).toFixed(1)}M`} />
                 <YAxis dataKey="name" type="category" width={120} tick={{ fontSize: 12 }} />
-                <RechartsTooltip formatter={(value: number) => `${(value / 1000000).toFixed(2)}M`} />
+                <RechartsTooltip formatter={(value: any) => `${(Number(value) / 1000000).toFixed(2)}M`} />
                 <Bar dataKey="value" fill="var(--accent-primary)" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>

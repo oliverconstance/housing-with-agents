@@ -3,10 +3,12 @@ import { ExternalLink } from 'lucide-react';
 
 interface FactTooltipProps {
   children: React.ReactNode;
-  referenceIds: string[];
+  referenceIds?: string[];
+  sourceText?: string;
+  sourceUrl?: string;
 }
 
-const FactTooltip: React.FC<FactTooltipProps> = ({ children, referenceIds }) => {
+const FactTooltip: React.FC<FactTooltipProps> = ({ children, referenceIds, sourceText, sourceUrl }) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -43,26 +45,44 @@ const FactTooltip: React.FC<FactTooltipProps> = ({ children, referenceIds }) => 
             <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
               Sources
             </p>
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              {referenceIds.map(refId => (
-                <a 
-                  key={refId}
-                  href={`/references#${refId}`} 
-                  style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '0.25rem',
-                    fontSize: '0.85rem',
-                    fontWeight: 600,
-                    padding: '0.25rem 0.5rem',
-                    background: 'rgba(14, 165, 233, 0.1)',
-                    borderRadius: '4px'
-                  }}
-                >
-                  [{refId}] <ExternalLink size={12} />
-                </a>
-              ))}
-            </div>
+            {referenceIds && referenceIds.length > 0 ? (
+              <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                {referenceIds.map(refId => (
+                  <a 
+                    key={refId}
+                    href={`/references#${refId}`} 
+                    style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '0.25rem',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      padding: '0.25rem 0.5rem',
+                      background: 'rgba(14, 165, 233, 0.1)',
+                      borderRadius: '4px'
+                    }}
+                  >
+                    [{refId}] <ExternalLink size={12} />
+                  </a>
+                ))}
+              </div>
+            ) : sourceText && sourceUrl ? (
+              <a 
+                href={sourceUrl} 
+                target="_blank" 
+                rel="noreferrer"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  gap: '0.25rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 600
+                }}
+              >
+                {sourceText} <ExternalLink size={14} />
+              </a>
+            ) : null}
             
             {/* Tooltip arrow */}
             <div style={{
