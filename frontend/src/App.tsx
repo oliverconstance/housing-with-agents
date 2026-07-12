@@ -8,6 +8,7 @@ import BuildingPage from './pages/BuildingPage';
 // import FactCheckPage from './pages/FactCheckPage';
 import PolicyLayout from './pages/Policy/PolicyLayout';
 import MethodologyPage from './pages/MethodologyPage';
+import ReferencesPage from './pages/ReferencesPage';
 
 const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,6 +43,7 @@ const App: React.FC = () => {
           <Route path="/policy/*" element={<PolicyLayout />} />
           {/* <Route path="/fact-check" element={<FactCheckPage />} /> HIDDEN DUE TO SEVERE BUGS */}
           <Route path="/methodology" element={<MethodologyPage />} />
+          <Route path="/references" element={<ReferencesPage />} />
         </Routes>
       </main>
     </div>

@@ -38,6 +38,8 @@
 - [ ] **TSK-040**: Fix FactTooltip disappearing on hover.
 - [ ] **TSK-041**: Stabilize Current Stock Recharts Y-axis scaling.
 - [ ] **TSK-042**: Build MHCLG Stock Data scraper (`mhclg_stock.py`) for the backend pipeline.
+- [ ] **TSK-043**: Implement Dynamic Referencing system (Backend Firestore upserts, Frontend References Page).
+- [ ] **TSK-044**: Overhaul Stock UI to display Property Type / Ownership breakdowns and implement 2-source minimum validation.
 - [ ] **TSK-020**: Run performance profiling to hit the 2s load time target.
 - [x] **TSK-021**: Configure custom domain mapping (`housinginsights.uk`). *(Completed: 2026-07-06)*
 

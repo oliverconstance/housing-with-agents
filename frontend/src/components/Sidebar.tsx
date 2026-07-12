@@ -8,7 +8,8 @@ import {
   Database,
   Moon,
   Sun,
-  Info
+  Info,
+  BookMarked
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -56,6 +57,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <NavLink to="/methodology" onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <Database size={20} />
           <span>Methodology</span>
+        </NavLink>
+
+        <NavLink to="/references" onClick={onClose} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+          <BookMarked size={20} />
+          <span>References</span>
         </NavLink>
       </nav>
 
